@@ -19,23 +19,24 @@ export default function Logo({ className = "w-20 h-20" }) {
           
           {/* Subtle drop shadow */}
           <filter id="logo-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000000" floodOpacity="0.4" />
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#000000" floodOpacity="0.25" />
           </filter>
         </defs>
 
         <g filter="url(#logo-shadow)">
+          {/* Black Background Circle to preserve your white/gold logo on the new light theme */}
+          <circle cx="50" cy="50" r="48" fill="#121212" />
+
           {/* 1. White Crescent 'C' */}
-          {/* Draw outer circle counter-clockwise and inner circle clockwise to cut out a tapering crescent opening on the right */}
           <path
-            d="M 46 15 
-               A 34 34 0 1 0 46 85 
-               A 30 30 0 1 1 46 15 
+            d="M 46 17 
+               A 32 32 0 1 0 46 83 
+               A 28 28 0 1 1 46 17 
                Z"
             fill="#FFFFFF"
           />
 
           {/* 2. Gold Serif '1' */}
-          {/* Positioned vertically in the center/right overlapping the crescent */}
           <path
             d="M 40.5 49
                L 43 49

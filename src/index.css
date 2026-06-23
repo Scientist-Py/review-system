@@ -12,20 +12,20 @@
   --color-gold-800: #4D4100;
   --color-gold-900: #1A1600;
 
-  --color-luxury-black: #050506;      
-  --color-luxury-dark: #0A0A0D;       
-  --color-luxury-card: rgba(13, 13, 16, 0.75); 
-  --color-luxury-glass: rgba(10, 10, 12, 0.65);
-  --color-luxury-border: rgba(255, 215, 0, 0.08); 
-  --color-luxury-borderHover: rgba(255, 215, 0, 0.25); 
-  --color-luxury-textMuted: #9CA3AF;  
-  --color-luxury-textLight: #E5E7EB;  
+  --color-luxury-black: #F5F4F1;      /* Light Warm Cream-Grey Background */
+  --color-luxury-dark: #121212;       /* Matte Black Primary/Selected Buttons */
+  --color-luxury-card: #FFFFFF;       /* Pure White Card panels */
+  --color-luxury-glass: rgba(255, 255, 255, 0.92);
+  --color-luxury-border: rgba(18, 18, 18, 0.07); 
+  --color-luxury-borderHover: rgba(18, 18, 18, 0.15); 
+  --color-luxury-textMuted: #5A6B7C;  /* Slate Muted Text */
+  --color-luxury-textLight: #1C2A39;  /* Deep Charcoal Header Text */
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
 
-  --shadow-gold-glow: 0 0 15px rgba(255, 215, 0, 0.08);
-  --shadow-gold-glow-lg: 0 0 25px rgba(255, 215, 0, 0.18);
+  --shadow-gold-glow: 0 8px 30px rgba(18, 18, 18, 0.03), 0 1px 3px rgba(18, 18, 18, 0.01);
+  --shadow-gold-glow-lg: 0 10px 40px rgba(18, 18, 18, 0.05), 0 2px 8px rgba(18, 18, 18, 0.02);
 
   --animate-fade-in: fadeIn 0.5s ease-out forwards;
   --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -42,7 +42,7 @@
   }
   @keyframes pulseSubtle {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.75; }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -59,11 +59,11 @@
 }
 
 body {
-  background-color: #050506;
+  background-color: #F5F4F1;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(255, 215, 0, 0.02) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.02) 0px, transparent 50%);
-  color: #E5E7EB;
+    radial-gradient(at 0% 0%, rgba(197, 168, 128, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(18, 18, 18, 0.02) 0px, transparent 50%);
+  color: #1C2A39;
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
@@ -76,15 +76,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(18, 18, 18, 0.01);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 215, 0, 0.15);
+  background: rgba(18, 18, 18, 0.12);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 215, 0, 0.35);
+  background: rgba(18, 18, 18, 0.25);
 }

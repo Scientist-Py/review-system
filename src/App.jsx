@@ -34,14 +34,12 @@ export default function App() {
 
   // Log scan and load approved examples on mount
   useEffect(() => {
-    // 1. Record scan once per session
     const sessionRecorded = sessionStorage.getItem("scanRecorded");
     if (!sessionRecorded) {
       analytics.incrementScan();
       sessionStorage.setItem("scanRecorded", "true");
     }
 
-    // 2. Load preferences list for learning
     try {
       const stored = localStorage.getItem(PREFERENCES_KEY);
       if (stored) {
@@ -52,8 +50,8 @@ export default function App() {
     }
   }, []);
 
-  // Trigger boutique gold and silver confetti
-  const triggerGoldConfetti = () => {
+  // Trigger boutique gold, charcoal, and white confetti
+  const triggerConfetti = () => {
     try {
       const duration = 1.5 * 1000;
       const end = Date.now() + duration;
@@ -64,14 +62,14 @@ export default function App() {
           angle: 60,
           spread: 55,
           origin: { x: 0, y: 0.8 },
-          colors: ['#FFD700', '#B8860B', '#FFFFFF', '#E5E7EB']
+          colors: ['#FFD700', '#121212', '#FFFFFF', '#D4AF37']
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1, y: 0.8 },
-          colors: ['#FFD700', '#B8860B', '#FFFFFF', '#E5E7EB']
+          colors: ['#FFD700', '#121212', '#FFFFFF', '#D4AF37']
         });
 
         if (Date.now() < end) {
@@ -97,11 +95,9 @@ export default function App() {
     setFormData(data);
     setCurrentPage('result');
     
-    // Log review generation event in analytics
     analytics.incrementReviewGenerated(data.selectedItems);
 
     try {
-      // Pass both form details and userApprovedExamples for learning
       const response = await generateReviewDraft({
         ...data,
         userApprovedExamples
@@ -148,23 +144,17 @@ export default function App() {
   };
 
   const handlePostReviewClick = () => {
-    // 1. Trigger celebration
-    triggerGoldConfetti();
+    triggerConfetti();
     
-    // 2. Increment analytics stats
     analytics.incrementCopyClick();
     analytics.incrementGoogleClick();
 
-    // 3. Mark customer as returning for future scans & save review for learning
     try {
       localStorage.setItem("reviewGenerated", "true");
       
-      // Learning block: Save final edited review text as a future few-shot exemplar
       const latestApproved = [...userApprovedExamples];
-      // Avoid duplicate saves
       if (!latestApproved.includes(reviewText) && reviewText.trim().length > 15) {
         latestApproved.push(reviewText);
-        // Limit historical exemplars size to keep prompt compact and relevant
         const trimmedList = latestApproved.slice(-6);
         setUserApprovedExamples(trimmedList);
         localStorage.setItem(PREFERENCES_KEY, JSON.stringify(trimmedList));
@@ -173,10 +163,8 @@ export default function App() {
       console.warn("Unable to save statistics/learning preferences:", e);
     }
 
-    // 4. Open success modal instructions
     setIsSuccessOpen(true);
 
-    // 5. Open redirect in new tab after 1.5s countdown
     setTimeout(() => {
       window.open(googleReviewLink, '_blank', 'noopener,noreferrer');
       setIsSuccessOpen(false);
@@ -194,17 +182,17 @@ export default function App() {
   return (
     <div className="relative min-h-screen flex flex-col justify-between overflow-x-hidden pb-12 select-none bg-luxury-black">
       
-      {/* Decorative premium gold & green glowing orbs */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] bg-green-700/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-gold-400/3 rounded-full blur-[90px] pointer-events-none" />
+      {/* Decorative premium soft glowing orbs */}
+      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] bg-gold-400/3 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-slate-400/3 rounded-full blur-[90px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <header className="w-full max-w-5xl mx-auto px-4 py-4 flex items-center justify-between border-b border-white/5 relative z-10">
+      <header className="w-full max-w-5xl mx-auto px-4 py-4 flex items-center justify-between border-b border-luxury-border relative z-10">
         <div onClick={handleReset} className="flex items-center gap-2 cursor-pointer">
           <Logo className="w-9 h-9" />
           <div className="text-left">
-            <span className="font-serif text-sm font-bold tracking-wider text-white block">CHAPTER ONE</span>
-            <span className="text-[9px] font-sans font-bold text-gold-400 tracking-widest uppercase block -mt-1">Cafe Assistant</span>
+            <span className="font-serif text-sm font-bold tracking-wider text-luxury-textLight block">CHAPTER ONE</span>
+            <span className="text-[9px] font-sans font-bold text-gold-600 tracking-widest uppercase block -mt-1">Cafe Assistant</span>
           </div>
         </div>
 
@@ -212,7 +200,7 @@ export default function App() {
         {(currentPage !== 'landing' || showDashboard) && (
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gold-400/20 bg-gold-400/5 text-xs text-gold-400 hover:bg-gold-400/10 hover:border-gold-400/40 active:scale-95 transition-all cursor-pointer font-semibold"
+            className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gray-200 bg-white text-xs text-luxury-textLight hover:bg-gray-50 active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Restart</span>
@@ -270,7 +258,7 @@ export default function App() {
 
       {/* Brand Compliance Footer */}
       <footer className="w-full text-center px-4 mt-8 relative z-10">
-        <p className="text-[9px] font-sans font-semibold text-gray-500 leading-relaxed max-w-xs mx-auto">
+        <p className="text-[9px] font-sans font-semibold text-luxury-textMuted leading-relaxed max-w-xs mx-auto">
           &copy; 2026 Chapter One Cafe Baghpat. Powered by Google Gemini API. 
           The assistant will never post directly to Google Reviews. All stars and final submissions are done manually by customers.
         </p>

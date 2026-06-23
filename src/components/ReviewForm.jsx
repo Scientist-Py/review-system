@@ -81,27 +81,27 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-5 rounded-2xl border border-luxury-border bg-luxury-card backdrop-blur-md shadow-gold-glow-lg space-y-4 animate-slide-up text-white">
+    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-5 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow-lg space-y-4 animate-slide-up text-luxury-textLight">
       
       {/* Title */}
       <div className="text-center">
         <h2 className="font-serif text-lg sm:text-xl font-bold tracking-wide flex items-center justify-center gap-2">
-          <Utensils className="w-4.5 h-4.5 text-gold-400" />
+          <Utensils className="w-4.5 h-4.5 text-gold-600" />
           Share Your Experience
         </h2>
-        <p className="text-[10px] text-gray-400 font-sans">Quick, simple selections. We do the rest.</p>
+        <p className="text-[10px] text-luxury-textMuted font-sans font-bold">Quick, simple selections. We do the rest.</p>
       </div>
 
       {/* Error Message */}
       {errorMsg && (
-        <div className="p-2.5 text-xs bg-red-500/10 border border-red-500/20 text-red-400 font-sans font-bold rounded-xl text-center">
+        <div className="p-2.5 text-xs bg-red-50 border border-red-200 text-red-700 font-sans font-bold rounded-xl text-center shadow-sm">
           {errorMsg}
         </div>
       )}
 
       {/* 1. What did you enjoy? Checklist */}
       <div className="space-y-1.5">
-        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-400">What did you enjoy?</label>
+        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">What did you enjoy?</label>
         <div className="flex flex-wrap gap-1.5 select-none">
           {CHECKLIST_ITEMS.map((item) => {
             const isSelected = selectedItems.includes(item);
@@ -110,10 +110,10 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 key={item}
                 type="button"
                 onClick={() => handleItemToggle(item)}
-                className={`px-3.5 py-1.5 rounded-xl border text-[11px] font-sans font-semibold transition-all duration-150 cursor-pointer shadow-sm ${
+                className={`px-3.5 py-1.5 rounded-full border text-[11px] font-sans font-bold transition-all duration-150 cursor-pointer shadow-sm ${
                   isSelected
-                    ? 'bg-gold-400/10 border-gold-400 text-gold-400 shadow-gold-glow'
-                    : 'bg-white/5 border-white/5 text-gray-300 hover:border-white/10'
+                    ? 'bg-luxury-dark border-luxury-dark text-white'
+                    : 'bg-[#F2F1EF] border-transparent text-luxury-textLight hover:bg-gray-200'
                 }`}
               >
                 {item}
@@ -124,10 +124,10 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
       </div>
 
       {/* 2. Rating Selector */}
-      <div className="space-y-1 text-center py-1 bg-white/5 rounded-xl border border-white/5">
-        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-400">How was your experience?</label>
+      <div className="space-y-1 text-center py-1.5 bg-[#F2F1EF]/60 rounded-2xl border border-gray-100 shadow-inner">
+        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">How was your experience?</label>
         
-        <div className="flex items-center justify-center gap-1.5 py-1">
+        <div className="flex items-center justify-center gap-1.5 py-1 select-none">
           {[1, 2, 3, 4, 5].map((star) => {
             const active = star <= (hoverRating || experienceRating);
             return (
@@ -142,26 +142,26 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 <Star
                   className={`w-7.5 h-7.5 transition-all ${
                     active
-                      ? 'fill-gold-400 stroke-gold-500 drop-shadow-[0_0_4px_rgba(255,215,0,0.35)]'
-                      : 'stroke-white/10 fill-transparent'
+                      ? 'fill-gold-400 stroke-gold-500 drop-shadow-[0_0_3px_rgba(255,215,0,0.3)]'
+                      : 'stroke-gray-300 fill-transparent hover:stroke-gold-400'
                   }`}
                 />
               </button>
             );
           })}
         </div>
-        <span className="text-[10px] font-sans font-bold text-gold-400/90 uppercase opacity-95">
+        <span className="text-[10px] font-sans font-bold text-gold-600 uppercase opacity-95">
           {getRatingLabel(hoverRating || experienceRating) || "Rate Us"}
         </span>
       </div>
 
       {/* 3. Language Selector */}
       <div className="space-y-1.5">
-        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-400 flex items-center gap-1">
-          <Languages className="w-3.5 h-3.5" />
+        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
+          <Languages className="w-3.5 h-3.5 text-gold-600" />
           Review Language
         </label>
-        <div className="grid grid-cols-2 gap-1.5 bg-white/5 p-1 rounded-xl border border-white/5">
+        <div className="grid grid-cols-2 gap-1 bg-[#F2F1EF] p-1 rounded-xl border border-transparent">
           {LANGUAGE_ITEMS.map((lang) => {
             const isSelected = language === lang.id;
             return (
@@ -169,10 +169,10 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 key={lang.id}
                 type="button"
                 onClick={() => setLanguage(lang.id)}
-                className={`py-2 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
+                className={`py-1.5 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
                   isSelected
-                    ? 'bg-gold-400 text-black shadow-gold-glow'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-luxury-dark text-white'
+                    : 'text-luxury-textMuted hover:text-luxury-textLight'
                 }`}
               >
                 {lang.label}
@@ -184,11 +184,11 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
 
       {/* 4. Review Length Selector */}
       <div className="space-y-1.5">
-        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-400 flex items-center gap-1">
-          <Timer className="w-3.5 h-3.5" />
+        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
+          <Timer className="w-3.5 h-3.5 text-gold-600" />
           Review Length
         </label>
-        <div className="grid grid-cols-3 gap-1.5 bg-white/5 p-1 rounded-xl border border-white/5">
+        <div className="grid grid-cols-3 gap-1 bg-[#F2F1EF] p-1 rounded-xl border border-transparent">
           {MODE_ITEMS.map((mode) => {
             const isSelected = reviewMode === mode.id;
             return (
@@ -196,10 +196,10 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 key={mode.id}
                 type="button"
                 onClick={() => setReviewMode(mode.id)}
-                className={`py-2 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
+                className={`py-1.5 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
                   isSelected
-                    ? 'bg-gold-400 text-black shadow-gold-glow'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-luxury-dark text-white'
+                    : 'text-luxury-textMuted hover:text-luxury-textLight'
                 }`}
               >
                 {mode.label}
@@ -211,8 +211,8 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
 
       {/* 5. Tone Selector */}
       <div className="space-y-1.5">
-        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-400 flex items-center gap-1">
-          <Type className="w-3.5 h-3.5" />
+        <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
+          <Type className="w-3.5 h-3.5 text-gold-600" />
           Writing Tone
         </label>
         <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar select-none">
@@ -223,10 +223,10 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 key={tone.id}
                 type="button"
                 onClick={() => setWritingTone(tone.id)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-sans font-bold transition-all shrink-0 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm ${
                   isSelected
-                    ? 'bg-gold-400/10 border border-gold-400 text-gold-400 shadow-gold-glow'
-                    : 'bg-white/5 border border-white/5 text-gray-400 hover:text-white'
+                    ? 'bg-luxury-dark text-white'
+                    : 'bg-[#F2F1EF] text-luxury-textMuted hover:text-luxury-textLight'
                 }`}
               >
                 {tone.label}
@@ -236,20 +236,20 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
         </div>
       </div>
 
-      {/* Action Button */}
+      {/* Action Button - Solid Black rounded pill */}
       <button
         type="submit"
         disabled={isGenerating}
-        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-sans font-bold text-black bg-gold-400 hover:bg-gold-300 shadow-gold-glow active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-black shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
       >
         {isGenerating ? (
           <div className="flex items-center gap-2 text-sm">
-            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             <span>Drafting your review...</span>
           </div>
         ) : (
           <>
-            <Sparkles className="w-4.5 h-4.5 fill-black stroke-black" />
+            <Sparkles className="w-4.5 h-4.5 fill-white stroke-white" />
             <span className="text-sm">Generate Review Draft</span>
           </>
         )}
