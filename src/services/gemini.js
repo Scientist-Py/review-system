@@ -64,40 +64,134 @@ ${userApprovedExamples.slice(-3).map((ex, idx) => `Preference Example ${idx + 1}
 `;
   }
 
-  // Language instructions
-  const languageInstruction = language === "Hinglish"
-    ? "Write the review draft in conversational Hinglish (Hindi written in English alphabet, e.g. use natural phrases like 'maza aa gaya', 'taste next level tha', 'bohot sahi spot hai', 'highly recommend karenge', etc.). Make it sound like a real WhatsApp chat review."
-    : "Write the review draft in natural Indian English.";
+  // Construct personalities list and select one randomly
+  const personalities = [
+    "College student", "Family visitor", "Food lover", "Working professional",
+    "First-time customer", "Regular customer", "Friends group visitor",
+    "Quick coffee visitor", "Evening diner", "Weekend visitor"
+  ];
+  const chosenPersonality = personalities[Math.floor(Math.random() * personalities.length)];
 
   // Construct the prompt
-  const prompt = `You are generating a Google review draft for a cafe located in Baghpat.
+  const prompt = `You are an expert review-writing assistant helping real restaurant customers turn their experience into a natural Google review draft.
 
-Rules:
-1. Every review must be completely unique.
-2. Never repeat sentence structures or copy formatting from previous reviews.
-3. Target review length: ${chosenLengthGuide}.
-4. Writing style/tone: ${writingTone}.
-5. ${languageInstruction}
-6. Sound human, authentic, and completely un-robotic.
-7. Output only review text. No quotation marks. No emojis. No hashtags.
-8. Do not mention numerical ratings (do not say "5 stars" or "5/5").
-9. DO NOT always mention the brand name "Chapter One Cafe" or "Chapter One Cafe Baghpat". Only mention the brand name explicitly in about 30% of reviews. In the other 70%, refer to it naturally as "this place", "this cafe", "this spot", "the cafe near bypass road", etc.
-10. NATURALLY include at least one or two of these local descriptors:
-    - Chapter One Cafe Baghpat (use this brand name sparingly)
-    - near Bajaj showroom
-    - opposite Maya Hotel
-    - near bypass road
-11. Style directive for extreme uniqueness: ${chosenModifier}
-12. Smart cues based on selected items:
-${smartTriggers || "- Focus on overall great dining experience."}
+Your task is to generate ONE realistic customer review based on the information provided.
+
+IMPORTANT GOAL:
+The review must feel like it was written by a genuine customer, not by AI.
+
+ABSOLUTE RULES:
+* Every review must be unique.
+* Never reuse sentence structures repeatedly.
+* Never use templates.
+* Never sound like an advertisement.
+* Never sound promotional.
+* Never sound corporate.
+* Never use emojis.
+* Never use hashtags.
+* Never use bullet points.
+* Never use quotation marks.
+* Never mention that AI generated the review.
+* Never mention discounts, rewards, gifts, offers, coupons, or incentives.
+* Never force positivity.
+* Match the customer's actual ratings and experience.
+
+VARIETY RULES:
+Randomly vary:
+* Opening sentence style
+* Sentence length
+* Vocabulary
+* Review structure
+* Writing personality
+* Review focus
+
+Do not always mention every aspect.
+Some reviews should focus mostly on food.
+Some reviews should focus mostly on ambience.
+Some reviews should focus mostly on staff.
+Some reviews should focus mostly on cleanliness.
+Some reviews should focus mostly on overall experience.
+Some reviews should mention multiple aspects.
+
+TARGET LENGTH GUIDE:
+- Target review length: ${chosenLengthGuide}
+
+WRITING PERSONALITIES & TONE:
+- Write in this tone: ${writingTone}
+- Assume this customer personality: ${chosenPersonality}
+
+FOOD MENTION RULES:
+Only mention dishes selected by the customer.
+When mentioning dishes:
+- Pizza: Mention size, cheese, toppings, freshness, sharing with friends or family.
+- 17 Inch Pizza: Mention large size, suitable for groups, loaded toppings, filling portions.
+- Burger: Mention freshness, filling portions, soft buns, taste.
+- Cold Coffee: Mention refreshing taste, balanced sweetness, chilled serving.
+- Momos: Mention hot serving, texture, stuffing, flavor.
+- Wheat Momos: Mention healthy option naturally.
+- Wheat Burger: Mention healthy option naturally.
+- Pasta: Mention creamy texture, flavor, portion size.
+- French Fries: Mention crispiness.
+- Sandwich: Mention freshness and filling.
+- Wrap: Mention balanced ingredients and taste.
+
+STAFF RULES:
+When staff is selected:
+Mention one or more: polite behavior, quick service, helpful staff, attentive service, friendly interaction. Do not repeat the same phrases often.
+
+AMBIENCE RULES:
+When ambience is selected:
+Mention one or more: cozy atmosphere, comfortable seating, warm lighting, relaxing vibe, peaceful environment, good place to spend time, suitable for friends or family. Do not always use the same descriptions.
+
+CLEANLINESS RULES:
+When cleanliness is selected:
+Mention one or more: clean tables, hygienic environment, neat setup, well-maintained space. Do not overemphasize hygiene every time.
+
+REALISM RULES:
+Make reviews feel imperfectly human.
+Not every review should be extremely enthusiastic.
+Some reviews should be simple.
+Some reviews should be detailed.
+Some reviews should mention only one thing they liked.
+Some reviews should mention two or three things.
+Do not mention every selected item in every review.
+
+ANTI-REPETITION RULES:
+Avoid overusing: "Highly recommended", "Amazing experience", "Best place ever", "Must visit", "Outstanding service", "Fantastic food". Use varied alternatives naturally.
+
+LANGUAGE RULES:
+- If language is English: Use natural Indian English.
+- If language is Hinglish: Use conversational Hinglish written in English letters.
+Examples of natural Hinglish:
+* Maza aa gaya.
+* Taste kaafi accha tha.
+* Pizza expected se bhi better nikla.
+* Friends ke saath aane ke liye acchi jagah hai.
+* Cold coffee kaafi refreshing thi.
+* Service bhi kaafi smooth thi.
+Do not overdo Hinglish slang.
+
+CAFE DETAILS & BRAND NAME RULES:
+- Cafe Name: Chapter One Cafe
+- Location Details: Baghpat (opposite Maya Hotel, near Bajaj showroom, near bypass road)
+- BRAND NAME RULE: DO NOT always mention the brand name "Chapter One Cafe" or "Chapter One Cafe Baghpat". Only mention the brand name explicitly in about 30% of reviews. In the other 70%, refer to it naturally as "this place", "this cafe", "this spot", "the cafe near bypass road", etc.
+- LANDMARK RULE: NATURALLY include at least one or two of these local descriptors: "near Bajaj showroom", "opposite Maya Hotel", "near bypass road".
+
+CUSTOMER VISIT DATA:
+- Rating: ${experienceRating}/5 stars
+- Items selected: ${itemsList}
+- Selected Language: ${language}
 ${learningBlock}
 
-Restaurant Details:
-Chapter One Cafe Baghpat
-User's Rating: ${experienceRating}/5
-Things User Enjoyed: ${itemsList}
+FINAL OUTPUT RULES:
+Return ONLY the review text.
+No titles.
+No explanations.
+No labels.
+No ratings.
+No extra formatting.
 
-Generate one natural customer review draft.`;
+Generate a natural review that feels genuinely written by a customer who actually visited the restaurant.`;
 
   // If API key is available, attempt Gemini generation
   if (apiKey && apiKey.trim() !== "" && apiKey !== "YOUR_GEMINI_API_KEY") {
