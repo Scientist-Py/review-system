@@ -86,6 +86,91 @@ export default function App() {
     setToast({ message, type });
   };
 
+  const getRandomItems = () => {
+    const items = ["Pizza", "Burger", "Momos", "Cold Coffee", "Staff", "Ambience", "Cleanliness"];
+    const shuffled = [...items].sort(() => 0.5 - Math.random());
+    const count = Math.floor(Math.random() * 3) + 2; // 2, 3, or 4 items
+    return shuffled.slice(0, count);
+  };
+
+  const getRandomTone = () => {
+    const tones = ["Casual", "Foodie", "Family", "Professional", "Short & Simple"];
+    return tones[Math.floor(Math.random() * tones.length)];
+  };
+
+  const getRandomMode = () => {
+    const modes = ["Quick", "Normal", "Detailed"];
+    return modes[Math.floor(Math.random() * modes.length)];
+  };
+
+  const handleInstantReview = async (language) => {
+    setIsGenerating(true);
+    const items = getRandomItems();
+    const tone = getRandomTone();
+    const mode = getRandomMode();
+
+    try {
+      const response = await generateReviewDraft({
+        selectedItems: items,
+        experienceRating: 5,
+        reviewMode: mode,
+        writingTone: tone,
+        language,
+        userApprovedExamples
+      });
+
+      const draftText = response.text;
+      setReviewText(draftText);
+      setFormData({
+        selectedItems: items,
+        experienceRating: 5,
+        reviewMode: mode,
+        writingTone: tone,
+        language
+      });
+
+      try {
+        await navigator.clipboard.writeText(draftText);
+        
+        triggerConfetti();
+        analytics.incrementReviewGenerated(items);
+        analytics.incrementCopyClick();
+        analytics.incrementGoogleClick();
+
+        try {
+          localStorage.setItem("reviewGenerated", "true");
+          const latestApproved = [...userApprovedExamples];
+          if (!latestApproved.includes(draftText) && draftText.trim().length > 15) {
+            latestApproved.push(draftText);
+            const trimmedList = latestApproved.slice(-6);
+            setUserApprovedExamples(trimmedList);
+            localStorage.setItem(PREFERENCES_KEY, JSON.stringify(trimmedList));
+          }
+        } catch (storageErr) {
+          console.warn("Learning storage failed", storageErr);
+        }
+
+        setIsSuccessOpen(true);
+        setTimeout(() => {
+          window.open(googleReviewLink, '_blank', 'noopener,noreferrer');
+          setIsSuccessOpen(false);
+          setIsGenerating(false);
+        }, 1600);
+
+      } catch (copyErr) {
+        console.warn("Clipboard copy blocked, showing result page instead:", copyErr);
+        setCurrentPage('result');
+        showToast("Review generated! Please copy & post manually.", "info");
+        setIsGenerating(false);
+      }
+
+    } catch (err) {
+      console.error("Instant review generation failed:", err);
+      showToast("Generation failed. Please try the Customize option.", "error");
+      setIsGenerating(false);
+    }
+  };
+
   const handleStartReview = () => {
     setCurrentPage('form');
   };
@@ -219,6 +304,8 @@ export default function App() {
               <LandingSection 
                 onStart={handleStartReview} 
                 onOpenDashboard={() => setShowDashboard(true)}
+                onInstantClick={handleInstantReview}
+                isGenerating={isGenerating}
               />
             )}
 

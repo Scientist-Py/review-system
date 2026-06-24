@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Logo from './Logo';
-import { ChevronRight, Award, MapPin, Settings, RotateCcw } from 'lucide-react';
+import { ChevronRight, Award, MapPin, Settings, RotateCcw, Sparkles } from 'lucide-react';
 
-export default function LandingSection({ onStart, onOpenDashboard }) {
+export default function LandingSection({ onStart, onOpenDashboard, onInstantClick, isGenerating }) {
   const [isReturning, setIsReturning] = useState(false);
+  const [selectedLang, setSelectedLang] = useState("English");
 
   useEffect(() => {
     try {
@@ -53,7 +54,7 @@ export default function LandingSection({ onStart, onOpenDashboard }) {
       <div className="max-w-md p-5 rounded-2xl border border-luxury-border bg-white shadow-gold-glow mb-8 animate-slide-up">
         <p className="font-sans text-xs sm:text-sm text-luxury-textMuted leading-relaxed font-semibold">
           {isReturning 
-            ? "Need another review draft for your visit today? Tap below to select what you ordered and generate a new draft."
+            ? "Need another review draft for your visit today? Choose a language and tap below to instantly generate and post, or customize one."
             : "Tell us about your visit and we'll help you create a natural review draft. Your review will be copied so you can easily paste it on our Google page."
           }
         </p>
@@ -65,14 +66,66 @@ export default function LandingSection({ onStart, onOpenDashboard }) {
         <span>Opposite Maya Hotel, Baghpat</span>
       </div>
 
-      {/* CTA Button - Solid Rounded Black Pill */}
-      <button
-        onClick={onStart}
-        className="group relative flex items-center justify-center gap-2 px-8 py-3.5 w-full max-w-xs rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-black shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
-      >
-        <span>{isReturning ? "Create New Draft" : "Start Draft Helper"}</span>
-        <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-      </button>
+      {/* Language Selector Pill */}
+      <div className="mb-6 w-full max-w-xs space-y-2">
+        <span className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">Select Review Language</span>
+        <div className="grid grid-cols-2 gap-1 bg-[#F2F1EF] p-1 rounded-xl border border-luxury-border">
+          <button
+            type="button"
+            onClick={() => setSelectedLang("English")}
+            className={`py-2 rounded-lg text-[11px] font-sans font-bold transition-all text-center cursor-pointer ${
+              selectedLang === "English"
+                ? 'bg-luxury-dark text-white shadow-sm'
+                : 'text-luxury-textMuted hover:text-luxury-textLight'
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedLang("Hinglish")}
+            className={`py-2 rounded-lg text-[11px] font-sans font-bold transition-all text-center cursor-pointer ${
+              selectedLang === "Hinglish"
+                ? 'bg-luxury-dark text-white shadow-sm'
+                : 'text-luxury-textMuted hover:text-luxury-textLight'
+            }`}
+          >
+            Hinglish (Hindi)
+          </button>
+        </div>
+      </div>
+
+      {/* CTA Action Buttons Container */}
+      <div className="flex flex-col gap-3 w-full max-w-xs select-none">
+        {/* 1-Click Instant Review Button */}
+        <button
+          onClick={() => onInstantClick(selectedLang)}
+          disabled={isGenerating}
+          className="group relative flex items-center justify-center gap-2 px-8 py-3.5 w-full rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-black shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+        >
+          {isGenerating ? (
+            <div className="flex items-center gap-2 text-xs">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <span>Generating review...</span>
+            </div>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 fill-white stroke-white text-gold-400" />
+              <span>Post Instant Review</span>
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </>
+          )}
+        </button>
+
+        {/* Manual Helper / Customize Button */}
+        <button
+          onClick={onStart}
+          disabled={isGenerating}
+          className="flex items-center justify-center gap-2 px-8 py-3 w-full rounded-full border border-gray-200 bg-white text-luxury-textLight hover:bg-gray-50 active:scale-[0.98] transition-all duration-300 font-bold shadow-sm disabled:opacity-60 cursor-pointer text-xs"
+        >
+          Customize Review
+        </button>
+      </div>
 
       {/* Secret Dashboard Link */}
       <button
