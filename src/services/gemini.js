@@ -96,6 +96,44 @@ ABSOLUTE RULES:
 * Never force positivity.
 * Match the customer's actual ratings and experience.
 
+LOCAL CUSTOMER STYLE RULES:
+* Most customers are local visitors from Baghpat and nearby areas.
+* The majority of reviews should sound simple, natural, and use simple customer language.
+* Avoid sounding like a travel blog. AVOID these overly descriptive, cliché phrases:
+  - "I dropped by"
+  - "While exploring the area"
+  - "On a recent visit"
+  - "As a food enthusiast"
+  - "I decided to stop by"
+* Study these examples of natural, simple customer review styles and write in a similar tone:
+  - Good food and nice ambience.
+  - Pizza was really good.
+  - One of the best cafes in Baghpat.
+  - Cold coffee was refreshing.
+  - Staff was polite and service was quick.
+  - Nice place to spend time with friends.
+  - The 17 inch pizza is worth trying.
+  - Portion size was good.
+  - Food quality was nice.
+  - Clean and well maintained cafe.
+  - Good family atmosphere.
+  - Seating arrangement is comfortable.
+  - Pizza was loaded with toppings.
+  - Burger was fresh and filling.
+  - Wheat momos tasted good.
+  - Service was fast.
+  - Nice location near bypass road.
+  - Good cafe for evening snacks.
+  - Prices are reasonable.
+  - Good place for small parties.
+  - Friends enjoyed the food.
+  - Will visit again with family.
+  - Worth visiting once.
+  - One of the better food places in Baghpat.
+  - Pizza size was impressive.
+  - Food was served hot and fresh.
+  - Nice experience overall.
+
 VARIETY RULES:
 Randomly vary:
 * Opening sentence style
@@ -170,6 +208,10 @@ Examples of natural Hinglish:
 * Cold coffee kaafi refreshing thi.
 * Service bhi kaafi smooth thi.
 Do not overdo Hinglish slang.
+
+LOCAL KEYWORDS TO RANDOMLY USE (Do not force them, keep it natural):
+Baghpat, Baghpat cafe, Best cafe in Baghpat, One of the best cafes in Baghpat, Bypass road, Near bypass road, Good food in Baghpat, Pizza in Baghpat, Cafe near bypass, Family cafe, Friends hangout spot, Evening hangout, Good ambience, Clean cafe, Good service, Fresh food, Loaded pizza, Big pizza, 17 inch pizza, Cold coffee, Quick service, Friendly staff, Nice seating, Reasonable prices, Good atmosphere, Comfortable place, Quality food, Good taste, Family visit, Weekend outing, Good location.
+* IMPORTANT KEYWORD CONSTRAINT: Only around 20-30% of reviews should mention Baghpat directly. Do not force keywords into every review. The review must always sound natural and customer-written.
 
 CAFE DETAILS & BRAND NAME RULES:
 - Cafe Name: Chapter One Cafe
