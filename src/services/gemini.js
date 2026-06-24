@@ -96,15 +96,12 @@ ABSOLUTE RULES:
 * Never force positivity.
 * Match the customer's actual ratings and experience.
 
-LOCAL CUSTOMER STYLE RULES:
-* Most customers are local visitors from Baghpat and nearby areas.
-* The majority of reviews should sound simple, natural, and use simple customer language.
-* Avoid sounding like a travel blog. AVOID these overly descriptive, cliché phrases:
-  - "I dropped by"
-  - "While exploring the area"
-  - "On a recent visit"
-  - "As a food enthusiast"
-  - "I decided to stop by"
+CRITICAL REALISM RULES:
+* Do NOT start reviews with: "Just dropped by", "Stopped by", "Quick stopover", "On a recent visit", "While visiting", "Decided to try", "Food enthusiast", "Visited this cafe", "Had the pleasure of visiting".
+* Do NOT sound like a food blogger, travel reviewer, or marketing content.
+* Avoid these forbidden words/phrases: "moreover", "furthermore", "additionally", "aesthetic details", "luxury theme", "exceptional", "outstanding", "remarkable", "highly recommended".
+* Most reviews must be written in simple everyday language.
+* Reviews should contain 1 to 3 short sentences, basic vocabulary, and a casual tone.
 * Study these examples of natural, simple customer review styles and write in a similar tone:
   - Good food and nice ambience.
   - Pizza was really good.
@@ -215,9 +212,8 @@ Baghpat, Baghpat cafe, Best cafe in Baghpat, One of the best cafes in Baghpat, B
 
 CAFE DETAILS & BRAND NAME RULES:
 - Cafe Name: Chapter One Cafe
-- Location Details: Baghpat (opposite Maya Hotel, near Bajaj showroom, near bypass road)
-- BRAND NAME RULE: DO NOT always mention the brand name "Chapter One Cafe" or "Chapter One Cafe Baghpat". Only mention the brand name explicitly in about 30% of reviews. In the other 70%, refer to it naturally as "this place", "this cafe", "this spot", "the cafe near bypass road", etc.
-- LANDMARK RULE: NATURALLY include at least one or two of these local descriptors: "near Bajaj showroom", "opposite Maya Hotel", "near bypass road".
+- BRAND NAME RULE: DO NOT always mention the brand name "Chapter One Cafe" or "Chapter One Cafe Baghpat". Only mention the brand name explicitly in about 30% of reviews. In the other 70%, refer to it naturally as "this place", "this cafe", "this spot", etc.
+- NO ADDRESSES RULE: Do NOT include specific address or landmark descriptions like "near Bajaj showroom", "opposite Maya Hotel", "near bypass road", or " बजाज बाईपास रोड". Keep the focus on simple customer sentiment.
 
 CUSTOMER VISIT DATA:
 - Rating: ${experienceRating}/5 stars
@@ -292,7 +288,7 @@ function cleanGeneratedText(text) {
 }
 
 /**
- * Local fallback review generator with English & Hinglish support and extreme sentence randomization.
+ * Local fallback review generator with English & Hinglish support and simple customer phrasing.
  */
 function generateFallbackReview({
   selectedItems,
@@ -303,113 +299,88 @@ function generateFallbackReview({
   userApprovedExamples
 }) {
   const selectRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-  // Landmark selection
-  const landmarks = [
-    "opposite Maya Hotel",
-    "near the Bajaj showroom in Baghpat",
-    "located near the bypass road",
-    "situated in Baghpat opposite Maya Hotel"
-  ];
-  const chosenLandmark = selectRandom(landmarks);
-  const ratingPositive = experienceRating >= 4;
-
-  // Adaptive Learning: Check if we have user-approved previous sentences
-  let preferredSentences = [];
-  if (userApprovedExamples && userApprovedExamples.length > 0) {
-    userApprovedExamples.forEach(ex => {
-      const parts = ex.split(/[.!?]/).map(s => s.trim()).filter(s => s.length > 15);
-      if (parts.length > 0) {
-        preferredSentences.push(selectRandom(parts));
-      }
-    });
-  }
-
-  // Randomize cafe name mentions (Explicit vs. Generic)
   const isHinglish = language === "Hinglish";
+
+  // Randomize cafe name mentions (Explicit vs. Generic) - NO Landmarks or Address strings
   const nameOptions = isHinglish 
-    ? ["Chapter One Cafe Baghpat", "ye place", "ye cafe", "ye spot", "ye cafe Baghpat mein"]
-    : ["Chapter One Cafe Baghpat", "this place", "this cafe", "this spot", "this cafe in Baghpat"];
+    ? ["Chapter One Cafe", "ye place", "ye cafe", "ye spot"]
+    : ["Chapter One Cafe", "this place", "this cafe", "this spot"];
   
-  // 30% chance to explicitly name the cafe, 70% to use a generic reference
   const name = Math.random() < 0.3 ? nameOptions[0] : selectRandom(nameOptions.slice(1));
 
-  // ENGLISH phrase matrices
+  // Simple customer starters that do not start with the banned phrases
   const englishStarters = [
-    `Had a quick stopover at ${name}, which is ${chosenLandmark}.`,
-    `Just dropped by ${name} ${chosenLandmark} for a quick bite.`,
-    `Casual hangout at ${name} today, right ${chosenLandmark}.`,
-    `Always on the hunt for great taste and ${name} ${chosenLandmark} is a solid find.`,
-    `Visited ${name} ${chosenLandmark} with family for dinner and had a lovely time.`,
-    `Excellent spot for a quick coffee meeting at ${name} near bypass road.`
+    `Had a good experience at ${name}.`,
+    `Nice time at ${name} today.`,
+    `Always a nice hangout spot.`,
+    `Food at ${name} is quite good.`,
+    `Tried this spot with friends.`,
+    `A nice little cafe in Baghpat.`
   ];
 
   const englishItemPhrases = {
     "Pizza": [
-      "The pizza was huge in size, loaded with cheese, and perfect for sharing.",
-      "The pizza had an amazing crust, lots of cheese, and is great for sharing with friends.",
-      "Loved the sharing-size pizza, very cheesy and delicious."
+      "Pizza was loaded with cheese and tasted very good.",
+      "The pizza was hot and cheesy, perfect for sharing.",
+      "Loved the pizza size and toppings."
     ],
     "Cold Coffee": [
-      "The cold coffee was incredibly refreshing with a very balanced sweetness.",
-      "Highly recommend their cold coffee, extremely refreshing and not overly sweet.",
-      "The cold coffee was top-class, perfect sweetness and very refreshing."
+      "Cold coffee was refreshing and had good sweetness.",
+      "Nice cold coffee, perfect sweetness and chilled.",
+      "Cold coffee was top class and very refreshing."
     ],
-    "Burger": ["The burger was juicy, fresh, and tasted excellent.", "Loved the burger, very filling and tasty."],
-    "Momos": ["Momos were steam-hot, fresh, and had a tasty filling.", "Wheat momos were steam-hot, fresh, and had a tasty filling."],
-    "Staff": ["The staff was super polite and their service was very prompt.", "Staff service was extremely efficient and polite."],
-    "Ambience": ["The ambience is beautiful with great aesthetic details and good music.", "Vibe is amazing here, perfect lighting and cozy seating arrangement."],
-    "Cleanliness": ["The cafe is spotlessly clean and very well-maintained.", "Appreciated the high standards of cleanliness and hygiene here."]
+    "Burger": ["Burger was fresh, filling, and tasted nice.", "Loved the fresh burger bun and filling portions."],
+    "Momos": ["Momos were hot, fresh, and had good stuffing.", "Wheat momos tasted really good and fresh."],
+    "Staff": ["Staff was polite and service was quick.", "Service was quick and staff was friendly."],
+    "Ambience": ["Seating arrangement is comfortable and lighting is nice.", "Nice seating and comfortable atmosphere."],
+    "Cleanliness": ["Cafe is clean and well maintained.", "Tables were clean and the environment was tidy."]
   };
 
   const englishGeneralPositive = [
-    "Overall experience was excellent and everything was spot-on.",
-    "Had a wonderful time dining here, highly recommended.",
-    "Very satisfied with our visit, definitely coming back again."
+    "Overall experience was good.",
+    "Will visit again with family.",
+    "Nice experience overall."
   ];
 
-  // HINGLISH phrase matrices
   const hinglishStarters = [
-    `Aaj ${name} gye the jo ki ${chosenLandmark} hai.`,
-    `${name} ${chosenLandmark} mein hangout kiya, maza aa gaya!`,
-    `Bypass road ke paas jo ${name} hai, wahan casual bite ke liye gye the.`,
-    `Baghpat mein achha cafe dhoond rahe the aur ${name} ${chosenLandmark} mil gya.`,
-    `Family ke saath ${name} gye the dinner ke liye, bohot badhiya spot hai.`
+    `${name} kafi badhiya spot hai.`,
+    `${name} mein badhiya time spend kiya.`,
+    `Baghpat mein ye cafe kafi sahi hai.`,
+    `Friends ke saath hang out karne ke liye achha spot hai.`,
+    `Family ke saath dinner ke liye gye the.`
   ];
 
   const hinglishItemPhrases = {
     "Pizza": [
-      "Pizza ka size bohot bada tha, full cheesy aur taste next level tha.",
-      "Yahan ka pizza super cheesy hai, sharing ke liye bilkul perfect.",
-      "Cheesy pizza tha, friends ke saath share karne ke liye bohot badhiya tha."
+      "Pizza ka taste expected se better tha aur size bhi bada tha.",
+      "Pizza super cheesy tha aur taste next level tha.",
+      "Garam pizza aur badhiya toppings, maza aa gaya share karke."
     ],
     "Cold Coffee": [
-      "Cold coffee bohot refreshing thi, sweetness ekdum balanced thi.",
-      "Highly recommend karenge cold coffee, bilkul heavy nahi hai aur taste sweet hai.",
-      "Cold coffee next level thi, dhoop mein maza aa gaya pee ke."
+      "Cold coffee kafi refreshing thi aur sweetness balanced thi.",
+      "Cold coffee thandi aur sweet thi, bilkul perfect taste.",
+      "Maza aa gaya cold coffee pee kar."
     ],
-    "Burger": ["Burger kafi juicy aur fresh tha, taste kafi sahi tha.", "Burger bohot tasty aur heavy tha."],
-    "Momos": ["Momos ekdum garam aur fresh filling ke saath serve kiye.", "Wheat momos kafi soft aur delicious the."],
-    "Staff": ["Staff members bohot polite hain aur service kafi fast hai.", "Service ekdum prompt aur helpful thi."],
-    "Ambience": ["Ambience bohot cozy aur premium hai, photography ke liye mast lighting hai.", "Vibe kafi chill hai aur music bhi kafi badhiya chal raha tha."],
-    "Cleanliness": ["Cafe ekdum neat and clean hai, hygiene ka kafi dhayan rakha hai.", "Clean tables aur hygienic environment tha."]
+    "Burger": ["Burger kafi fresh aur heavy tha, taste badhiya tha.", "Burger filling aur tasty tha."],
+    "Momos": ["Momos ekdum garam aur tasty filling ke saath serve kiye.", "Wheat momos kafi soft aur delicious the."],
+    "Staff": ["Staff polite tha aur service bhi kafi fast thi.", "Service kafi smooth aur quick thi."],
+    "Ambience": ["Seating comfort aur environment kafi relaxed tha.", "Cozy atmosphere tha aur seating badhiya thi."],
+    "Cleanliness": ["Cafe ekdum clean aur hygienic setup ke saath tha.", "Clean tables aur hygiene sahi thi."]
   };
 
   const hinglishGeneralPositive = [
-    "Overall bohot badhiya experience tha, maza aa gaya.",
-    "Service aur food dono top-notch hain, zaroor wapas aayenge.",
-    "Worth the price hai, Baghpat ka best cafe hai."
+    "Overall maza aa gaya.",
+    "Dobara zaroor visit karenge.",
+    "Nice experience tha yahan."
   ];
 
-  // Select language specific blocks
   const starterList = isHinglish ? hinglishStarters : englishStarters;
   const itemMap = isHinglish ? hinglishItemPhrases : englishItemPhrases;
   const generalList = isHinglish ? hinglishGeneralPositive : englishGeneralPositive;
 
   let start = selectRandom(starterList);
-  let generalOpinion = ratingPositive ? selectRandom(generalList) : (isHinglish ? "Theek experience tha, improve ho sakta hai." : "Decent visit, could be improved.");
+  let generalOpinion = selectRandom(generalList);
 
-  // Compile selected items
   let chosenItemPhrases = [];
   selectedItems.forEach(item => {
     if (itemMap[item]) {
@@ -417,15 +388,24 @@ function generateFallbackReview({
     }
   });
 
-  // Inject a preferred learned sentence if it exists (Adaptive Learning)
+  // Adaptive Learning: Check if we have user-approved previous sentences
+  let preferredSentences = [];
+  if (userApprovedExamples && userApprovedExamples.length > 0) {
+    userApprovedExamples.forEach(ex => {
+      const parts = ex.split(/[.!?]/).map(s => s.trim()).filter(s => s.length > 10);
+      if (parts.length > 0) {
+        preferredSentences.push(selectRandom(parts));
+      }
+    });
+  }
   if (preferredSentences.length > 0 && Math.random() > 0.4) {
     chosenItemPhrases.push(selectRandom(preferredSentences));
   }
 
-  // Dynamic sentence connector variables to maximize difference (uniqueness)
+  // Simple connectors only
   const connectors = isHinglish 
-    ? ["Aur haan,", "Khas baat ye thi ki", "Sach bataun toh", "Waise", "Saath mein"] 
-    : ["Specifically,", "Honestly,", "Moreover,", "What's more,", "On top of that,"];
+    ? ["Aur", "Waise", "Saath mein"] 
+    : ["Also", "Plus", "And"];
 
   let sentences = [];
   
@@ -433,8 +413,6 @@ function generateFallbackReview({
     sentences.push(start);
     if (chosenItemPhrases.length > 0) {
       sentences.push(chosenItemPhrases[0]);
-    } else {
-      sentences.push(generalOpinion);
     }
   } else if (reviewMode === "Normal") {
     sentences.push(start);
@@ -443,23 +421,18 @@ function generateFallbackReview({
       if (chosenItemPhrases[1]) {
         sentences.push(`${selectRandom(connectors)} ${chosenItemPhrases[1].toLowerCase()}`);
       }
+    } else {
+      sentences.push(generalOpinion);
     }
-    sentences.push(generalOpinion);
   } else {
     sentences.push(start);
     if (chosenItemPhrases.length > 0) {
-      sentences.push(chosenItemPhrases.slice(0, 2).join(" "));
-      if (chosenItemPhrases[2]) {
-        sentences.push(`${selectRandom(connectors)} ${chosenItemPhrases[2].toLowerCase()}`);
+      sentences.push(chosenItemPhrases[0]);
+      if (chosenItemPhrases[1]) {
+        sentences.push(chosenItemPhrases[1]);
       }
     }
     sentences.push(generalOpinion);
-    
-    const detailedAdditions = isHinglish
-      ? ["Baghpat bypass road ke paas travel karte hue yahan rukna bohot sahi option hai.", "Pricing bhi kafi sahi hai vibe ke hisab se.", "Wapas zaroor aayenge kuch aur try karne."]
-      : ["Definitely one of the best spots in Baghpat to stop by near the bypass road.", "Pricing is reasonable considering the luxury theme.", "Highly recommended spot!"];
-    
-    sentences.push(selectRandom(detailedAdditions));
   }
 
   let finalReviewText = sentences
