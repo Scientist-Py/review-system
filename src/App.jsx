@@ -151,11 +151,7 @@ export default function App() {
         }
 
         setIsSuccessOpen(true);
-        setTimeout(() => {
-          window.open(googleReviewLink, '_blank', 'noopener,noreferrer');
-          setIsSuccessOpen(false);
-          setIsGenerating(false);
-        }, 1600);
+        setIsGenerating(false);
 
       } catch (copyErr) {
         console.warn("Clipboard copy blocked, showing result page instead:", copyErr);
@@ -249,11 +245,6 @@ export default function App() {
     }
 
     setIsSuccessOpen(true);
-
-    setTimeout(() => {
-      window.open(googleReviewLink, '_blank', 'noopener,noreferrer');
-      setIsSuccessOpen(false);
-    }, 1600);
   };
 
   const handleReset = () => {
@@ -333,6 +324,7 @@ export default function App() {
       <SuccessPopup
         isOpen={isSuccessOpen}
         onClose={() => setIsSuccessOpen(false)}
+        googleReviewLink={googleReviewLink}
       />
 
       {toast && (
