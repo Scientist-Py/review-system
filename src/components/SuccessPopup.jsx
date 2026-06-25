@@ -43,43 +43,78 @@ export default function SuccessPopup({ isOpen, onClose, googleReviewLink }) {
         </p>
 
         {/* Visual Paste Helper Mockup */}
-        <div className="my-4 p-3.5 rounded-2xl border border-luxury-border bg-[#F5F4F1] text-left space-y-2.5 shadow-inner">
-          <span className="block text-[8px] uppercase font-sans font-extrabold tracking-wider text-gold-600 text-center">
-            How to Paste on Mobile (पेस्ट करने का तरीका)
+        <div className="my-4 p-4 rounded-2xl border border-luxury-border bg-[#F8F7F4] text-left space-y-3.5 shadow-inner">
+          <span className="block text-[9px] uppercase font-sans font-extrabold tracking-wider text-gold-600 text-center">
+            2-Step Quick Paste Guide (पेस्ट करने का तरीका)
           </span>
           
-          {/* Phone Keyboard Simulation */}
-          <div className="relative border border-gray-200 bg-white rounded-xl p-2.5 shadow-sm select-none">
-            {/* Mock Google Input Field */}
-            <div className="border border-gold-400/30 rounded-lg p-1.5 bg-gray-50/50 text-[9px] text-gray-400 font-sans italic flex items-center justify-between">
-              <span>Write a review...</span>
-              <span className="w-0.5 h-3 bg-gold-500 animate-pulse inline-block"></span>
+          {/* Phone Screen Mockup */}
+          <div className="relative border border-gray-200 bg-white rounded-2xl p-3 shadow-md select-none overflow-hidden max-w-[280px] mx-auto">
+            {/* Mock Google Maps Header */}
+            <div className="flex items-center gap-1.5 border-b border-gray-100 pb-2 mb-2">
+              <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold">G</div>
+              <div className="text-left leading-none">
+                <span className="text-[8px] font-bold text-gray-800 block">Chapter One Cafe</span>
+                <span className="text-[6px] text-gray-400 block font-semibold">Google Maps Review</span>
+              </div>
             </div>
             
-            {/* Keyboard Suggestion Bar Mock */}
-            <div className="mt-2.5 bg-gray-100 rounded-lg p-1.5 flex items-center justify-between text-[8px] font-sans font-bold text-luxury-textLight border border-gray-200/80 animate-pulse">
-              <span className="text-gold-700 bg-gold-50 px-1.5 py-0.5 rounded border border-gold-400/20">📋 Tap to Paste</span>
-              <span className="text-gray-400 font-semibold truncate max-w-[150px]">"Good food and nice..."</span>
+            {/* 5 Golden Stars */}
+            <div className="flex gap-0.5 justify-center my-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span key={star} className="text-xs text-amber-400">★</span>
+              ))}
+            </div>
+
+            {/* Mock Google Input Box (User clicks here) */}
+            <div className="border border-gold-400/40 rounded-lg p-2 bg-gray-50 text-[9px] text-gray-400 font-sans italic flex items-center justify-between shadow-inner">
+              <span>Share details of your experience...</span>
+              <span className="w-0.5 h-3 bg-gold-500 animate-pulse"></span>
             </div>
             
-            {/* Pointer finger indicator */}
-            <div className="absolute right-5 bottom-0.5 w-6 h-6 text-gold-600 animate-bounce pointer-events-none text-base">
-              👇
+            {/* Keyboard Suggestion Bar (Shows Copied Text) */}
+            <div className="mt-3 bg-gray-100 rounded-lg p-2 flex items-center gap-2 text-[8px] font-sans font-bold text-luxury-textLight border border-gray-200 shadow-sm animate-pulse-subtle">
+              <span className="text-[10px]">📋</span>
+              <div className="flex-1 min-w-0">
+                <span className="text-gold-700 block text-[7px] leading-tight font-extrabold uppercase">Tap to Paste (टच करें)</span>
+                <span className="text-gray-500 truncate block text-[7px] font-semibold">"Pizza expected se bhi better nikla..."</span>
+              </div>
+            </div>
+            
+            {/* Floating Pointer Hand Icon */}
+            <div className="absolute right-8 bottom-1 w-6 h-6 text-xl animate-bounce pointer-events-none">
+              👆
             </div>
           </div>
           
-          <div className="text-[10px] font-sans font-bold space-y-1 text-luxury-textMuted leading-relaxed">
-            <p className="flex items-start gap-1">
-              <span className="text-gold-600 font-bold">1.</span>
-              <span>Tap the Google review comment box.</span>
+          {/* Plain Bilingual Step list */}
+          <div className="text-[10.5px] font-sans font-bold space-y-2 text-luxury-textMuted leading-normal">
+            <p className="flex items-start gap-1.5">
+              <span className="flex items-center justify-center w-4.5 h-4.5 rounded-full bg-gold-100 text-gold-800 text-[9px] font-bold shrink-0 mt-0.5">1</span>
+              <span>
+                Tap the **comment box** inside Google.
+                <span className="block text-[9.5px] text-luxury-textMuted/80 font-semibold font-sans mt-0.5">
+                  (गूगल के खाली कमेंट बॉक्स पर टच करें)
+                </span>
+              </span>
             </p>
-            <p className="flex items-start gap-1">
-              <span className="text-gold-600 font-bold">2.</span>
-              <span>Tap the **Clipboard Suggestion** on your keyboard (as shown above).</span>
+            <p className="flex items-start gap-1.5">
+              <span className="flex items-center justify-center w-4.5 h-4.5 rounded-full bg-gold-100 text-gold-800 text-[9px] font-bold shrink-0 mt-0.5">2</span>
+              <span>
+                Tap the **copied text bubble** above your keyboard.
+                <span className="block text-[9.5px] text-luxury-textMuted/80 font-semibold font-sans mt-0.5">
+                  (कीबोर्ड के ऊपर आ रहे लिखे हुए मैसेज पर टच करें)
+                </span>
+              </span>
             </p>
-            <p className="flex items-start gap-1">
-              <span className="text-gold-600 font-bold">3.</span>
-              <span>Or **Long Press** the review box and tap **Paste** (पेस्ट).</span>
+            <p className="flex items-start gap-1.5">
+              <span className="flex items-center justify-center w-4.5 h-4.5 rounded-full bg-gold-100 text-gold-800 text-[9px] font-bold shrink-0 mt-0.5">3</span>
+              <span>
+                Or **long press** inside the box and select **Paste**.
+                <span className="block text-[9.5px] text-luxury-textMuted/80 font-semibold font-sans mt-0.5">
+                  (या खाली जगह को थोड़ी देर दबाकर रखें और Paste दबाएं)
+                </span>
+              </span>
             </p>
           </div>
         </div>
