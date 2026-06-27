@@ -42,13 +42,9 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
       )}
 
       {/* Main Titles */}
-      <h1 className="font-serif text-2.5xl sm:text-3.5xl font-bold text-luxury-textLight tracking-wide leading-tight mb-2 animate-fade-in px-4">
-        Welcome back to Chapter One AI Review System
+      <h1 className="font-serif text-2.5xl sm:text-3.5xl text-luxury-textLight tracking-wide leading-tight mb-6 animate-fade-in px-4">
+        Welcome to <span className="font-extrabold text-gold-600">Chapter One</span> AI Review System
       </h1>
-      
-      <p className="font-serif text-xs sm:text-sm text-gold-650 tracking-widest uppercase font-bold mb-6">
-        Baghpat
-      </p>
 
       {/* Description card with glassmorphism */}
       <div className="max-w-md p-5 rounded-2xl border border-luxury-border bg-luxury-card shadow-gold-glow mb-8 animate-slide-up">
