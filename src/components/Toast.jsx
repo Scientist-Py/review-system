@@ -15,22 +15,22 @@ export default function Toast({ message, type = 'success', onClose, duration = 4
   if (!message) return null;
 
   const iconMap = {
-    success: <CheckCircle2 className="w-5 h-5 text-gold-500 shrink-0" />,
-    error: <XCircle className="w-5 h-5 text-red-600 shrink-0" />,
-    warning: <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />,
-    info: <Info className="w-5 h-5 text-sky-600 shrink-0" />
+    success: <CheckCircle2 className="w-5 h-5 text-gold-400 shrink-0" />,
+    error: <XCircle className="w-5 h-5 text-red-400 shrink-0" />,
+    warning: <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />,
+    info: <Info className="w-5 h-5 text-sky-400 shrink-0" />
   };
 
   const borderColors = {
-    success: 'border-gold-400/40 shadow-gold-glow',
-    error: 'border-red-200 shadow-sm',
-    warning: 'border-amber-200 shadow-sm',
-    info: 'border-sky-200 shadow-sm'
+    success: 'border-gold-400/30 shadow-gold-glow bg-[#1C1C1E]/95',
+    error: 'border-red-800/30 bg-red-950/20',
+    warning: 'border-amber-800/30 bg-amber-950/20',
+    info: 'border-sky-800/30 bg-sky-950/20'
   };
 
   return (
     <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-sm animate-slide-up">
-      <div className={`flex items-start gap-3 p-4 rounded-xl border bg-white/95 backdrop-blur-md text-luxury-textLight shadow-lg ${borderColors[type]}`}>
+      <div className={`flex items-start gap-3 p-4 rounded-xl border backdrop-blur-md text-luxury-textLight shadow-lg ${borderColors[type]}`}>
         {/* Status Icon */}
         <div className="pt-0.5">
           {iconMap[type]}
@@ -44,7 +44,7 @@ export default function Toast({ message, type = 'success', onClose, duration = 4
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="p-0.5 rounded-lg text-gray-400 hover:text-luxury-dark hover:bg-gray-100 transition-colors cursor-pointer"
+          className="p-0.5 rounded-lg text-luxury-textMuted hover:text-luxury-textLight hover:bg-white/5 transition-colors cursor-pointer"
           aria-label="Close notification"
         >
           <X className="w-4 h-4" />

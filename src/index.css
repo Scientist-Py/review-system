@@ -1,31 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold-50: #FFFDF0;
-  --color-gold-100: #FFFAC2;
-  --color-gold-200: #FFF48F;
-  --color-gold-300: #FFE75C;
-  --color-gold-400: #FFD700;
-  --color-gold-500: #E6C200;
-  --color-gold-600: #B39700;
-  --color-gold-700: #806C00;
-  --color-gold-800: #4D4100;
-  --color-gold-900: #1A1600;
+  --color-gold-50: rgba(245, 166, 35, 0.06);
+  --color-gold-100: rgba(245, 166, 35, 0.12);
+  --color-gold-200: rgba(245, 166, 35, 0.25);
+  --color-gold-300: #F5A623;
+  --color-gold-400: #F5A623;       /* Amber Gold */
+  --color-gold-500: #D97706;       /* Dark Amber Gold */
+  --color-gold-600: #F5A623;
+  --color-gold-700: #D97706;
+  --color-gold-800: #B45309;
+  --color-gold-900: #78350F;
 
-  --color-luxury-black: #F5F4F1;      /* Light Warm Cream-Grey Background */
-  --color-luxury-dark: #121212;       /* Matte Black Primary/Selected Buttons */
-  --color-luxury-card: #FFFFFF;       /* Pure White Card panels */
-  --color-luxury-glass: rgba(255, 255, 255, 0.92);
-  --color-luxury-border: rgba(18, 18, 18, 0.07); 
-  --color-luxury-borderHover: rgba(18, 18, 18, 0.15); 
-  --color-luxury-textMuted: #5A6B7C;  /* Slate Muted Text */
-  --color-luxury-textLight: #1C2A39;  /* Deep Charcoal Header Text */
+  --color-luxury-black: #0D0D11;      /* Obsidian Slate Background */
+  --color-luxury-dark: #5C3D2E;       /* Warm Espresso Accent */
+  --color-luxury-darkHover: #7A523A;  /* Warm Espresso Hover */
+  --color-luxury-card: rgba(28, 28, 30, 0.55); /* Obsidian Slate Light + Glassmorphism */
+  --color-luxury-glass: rgba(13, 13, 17, 0.95);
+  --color-luxury-border: rgba(255, 255, 255, 0.08); /* Frosted thin border */
+  --color-luxury-borderHover: rgba(255, 255, 255, 0.16); 
+  --color-luxury-textMuted: #86868B;  /* Apple Neutrals Gray */
+  --color-luxury-textLight: #F5F5F7;  /* Apple Neutrals Silver */
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
 
-  --shadow-gold-glow: 0 8px 30px rgba(18, 18, 18, 0.03), 0 1px 3px rgba(18, 18, 18, 0.01);
-  --shadow-gold-glow-lg: 0 10px 40px rgba(18, 18, 18, 0.05), 0 2px 8px rgba(18, 18, 18, 0.02);
+  --shadow-gold-glow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-gold-glow-lg: 0 10px 40px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
 
   --animate-fade-in: fadeIn 0.5s ease-out forwards;
   --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -59,11 +60,11 @@
 }
 
 body {
-  background-color: #F5F4F1;
+  background-color: #0D0D11;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(197, 168, 128, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(18, 18, 18, 0.02) 0px, transparent 50%);
-  color: #1C2A39;
+    radial-gradient(at 0% 0%, rgba(92, 61, 46, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 166, 35, 0.08) 0px, transparent 50%);
+  color: #F5F5F7;
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
@@ -76,15 +77,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(18, 18, 18, 0.01);
+  background: rgba(255, 255, 255, 0.01);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(18, 18, 18, 0.12);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(18, 18, 18, 0.25);
+  background: rgba(255, 255, 255, 0.16);
 }

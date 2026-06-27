@@ -51,7 +51,7 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
       </p>
 
       {/* Description card with glassmorphism */}
-      <div className="max-w-md p-5 rounded-2xl border border-luxury-border bg-white shadow-gold-glow mb-8 animate-slide-up">
+      <div className="max-w-md p-5 rounded-2xl border border-luxury-border bg-luxury-card shadow-gold-glow mb-8 animate-slide-up">
         <p className="font-sans text-xs sm:text-sm text-luxury-textMuted leading-relaxed font-semibold">
           {isReturning 
             ? "Need another review draft for your visit today? Choose a language and tap below to instantly generate and post, or customize one."
@@ -69,7 +69,7 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
       {/* Language Selector Pill */}
       <div className="mb-6 w-full max-w-xs space-y-2">
         <span className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">Select Review Language</span>
-        <div className="grid grid-cols-2 gap-1 bg-[#F2F1EF] p-1 rounded-xl border border-luxury-border">
+        <div className="grid grid-cols-2 gap-1 bg-[#1C1C1E] p-1 rounded-xl border border-luxury-border">
           <button
             type="button"
             onClick={() => setSelectedLang("English")}
@@ -101,7 +101,7 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
         <button
           onClick={() => onInstantClick(selectedLang)}
           disabled={isGenerating}
-          className="group relative flex items-center justify-center gap-2 px-8 py-3.5 w-full rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-black shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+          className="group relative flex items-center justify-center gap-2 px-8 py-3.5 w-full rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
         >
           {isGenerating ? (
             <div className="flex items-center gap-2 text-xs">
@@ -121,7 +121,7 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
         <button
           onClick={onStart}
           disabled={isGenerating}
-          className="flex items-center justify-center gap-2 px-8 py-3 w-full rounded-full border border-gray-200 bg-white text-luxury-textLight hover:bg-gray-50 active:scale-[0.98] transition-all duration-300 font-bold shadow-sm disabled:opacity-60 cursor-pointer text-xs"
+          className="flex items-center justify-center gap-2 px-8 py-3 w-full rounded-full border border-luxury-border bg-[#1C1C1E] text-luxury-textLight hover:bg-[#2C2C2E] active:scale-[0.98] transition-all duration-300 font-bold shadow-sm disabled:opacity-60 cursor-pointer text-xs"
         >
           Customize Review
         </button>
@@ -130,7 +130,7 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
       {/* Secret Dashboard Link */}
       <button
         onClick={onOpenDashboard}
-        className="mt-10 text-[10px] text-gray-400 hover:text-luxury-dark font-sans flex items-center gap-1 opacity-70 hover:opacity-100 transition-all cursor-pointer uppercase tracking-wider py-1.5 font-bold"
+        className="mt-10 text-[10px] text-gray-450 hover:text-gold-400 font-sans flex items-center gap-1 opacity-70 hover:opacity-100 transition-all cursor-pointer uppercase tracking-wider py-1.5 font-bold"
       >
         <Settings className="w-3 h-3" />
         <span>Owner Dashboard</span>
