@@ -1,10 +1,11 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
 
-export default function SuccessPopup({ isOpen, onClose, googleReviewLink }) {
+export default function SuccessPopup({ isOpen, onClose, googleReviewLink, onGoogleClick }) {
   if (!isOpen) return null;
 
   const handleOpenGoogle = () => {
+    if (onGoogleClick) onGoogleClick();
     window.open(googleReviewLink, '_blank', 'noopener,noreferrer');
     onClose();
   };

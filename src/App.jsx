@@ -137,7 +137,6 @@ export default function App() {
         triggerConfetti();
         analytics.incrementReviewGenerated(items);
         analytics.incrementCopyClick();
-        analytics.incrementGoogleClick();
 
         try {
           localStorage.setItem("reviewGenerated", "true");
@@ -230,7 +229,6 @@ export default function App() {
     triggerConfetti();
     
     analytics.incrementCopyClick();
-    analytics.incrementGoogleClick();
 
     try {
       localStorage.setItem("reviewGenerated", "true");
@@ -327,6 +325,7 @@ export default function App() {
         isOpen={isSuccessOpen}
         onClose={() => setIsSuccessOpen(false)}
         googleReviewLink={googleReviewLink}
+        onGoogleClick={() => analytics.incrementGoogleClick()}
       />
 
       <PinModal
