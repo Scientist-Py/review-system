@@ -338,8 +338,10 @@ export default function App() {
       {/* Brand Compliance Footer */}
       <footer className="w-full text-center px-4 mt-8 relative z-10">
         <p className="text-[9px] font-sans font-semibold text-luxury-textMuted leading-relaxed max-w-xs mx-auto">
-          &copy; 2026 Chapter One Cafe Baghpat. Powered by Google Gemini API. 
-          The assistant will never post directly to Google Reviews. All stars and final submissions are done manually by customers.
+          &copy; 2026 Chapter One Cafe. Powered by AI. Designed & Developed by Tushar Chauhan.
+          <span className="block mt-1 opacity-75">
+            The assistant will never post directly to Google Reviews. All stars and final submissions are done manually by customers.
+          </span>
         </p>
       </footer>
 

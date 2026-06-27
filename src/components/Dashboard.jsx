@@ -153,7 +153,7 @@ export default function Dashboard({ onClose }) {
           <RefreshCcw className="w-3 h-3" />
           <span>Reset Stats</span>
         </button>
-        <span className="text-[10px] text-luxury-textMuted font-sans font-bold">Chapter One Cafe Baghpat &copy; 2026</span>
+        <span className="text-[10px] text-luxury-textMuted font-sans font-bold">Chapter One Cafe &copy; 2026</span>
       </div>
 
     </div>
