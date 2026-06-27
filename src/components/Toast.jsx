@@ -22,10 +22,10 @@ export default function Toast({ message, type = 'success', onClose, duration = 4
   };
 
   const borderColors = {
-    success: 'border-gold-400/30 shadow-gold-glow bg-[#1C1C1E]/95',
-    error: 'border-red-800/30 bg-red-950/20',
-    warning: 'border-amber-800/30 bg-amber-950/20',
-    info: 'border-sky-800/30 bg-sky-950/20'
+    success: 'border-gold-450/20 shadow-gold-glow bg-[#F5F5F7]/95',
+    error: 'border-red-200 bg-red-50/95',
+    warning: 'border-amber-200 bg-amber-50/95',
+    info: 'border-sky-200 bg-sky-50/95'
   };
 
   return (

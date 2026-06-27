@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold-50: rgba(245, 166, 35, 0.06);
-  --color-gold-100: rgba(245, 166, 35, 0.12);
-  --color-gold-200: rgba(245, 166, 35, 0.25);
-  --color-gold-300: #F5A623;
+  --color-gold-50: #FFFDF0;
+  --color-gold-100: #FFFAC2;
+  --color-gold-200: #FFF48F;
+  --color-gold-300: #FFE75C;
   --color-gold-400: #F5A623;       /* Amber Gold */
   --color-gold-500: #D97706;       /* Dark Amber Gold */
   --color-gold-600: #F5A623;
@@ -12,21 +12,21 @@
   --color-gold-800: #B45309;
   --color-gold-900: #78350F;
 
-  --color-luxury-black: #0D0D11;      /* Obsidian Slate Background */
-  --color-luxury-dark: #5C3D2E;       /* Warm Espresso Accent */
-  --color-luxury-darkHover: #7A523A;  /* Warm Espresso Hover */
-  --color-luxury-card: rgba(28, 28, 30, 0.55); /* Obsidian Slate Light + Glassmorphism */
-  --color-luxury-glass: rgba(13, 13, 17, 0.95);
-  --color-luxury-border: rgba(255, 255, 255, 0.08); /* Frosted thin border */
-  --color-luxury-borderHover: rgba(255, 255, 255, 0.16); 
+  --color-luxury-black: #F5F5F7;      /* Apple Neutral Light Gray Background */
+  --color-luxury-dark: #1D1D1F;       /* Apple Charcoal Solid Active Color */
+  --color-luxury-darkHover: #000000;
+  --color-luxury-card: rgba(255, 255, 255, 0.8); /* Light Frosted Glassmorphism card */
+  --color-luxury-glass: rgba(255, 255, 255, 0.94);
+  --color-luxury-border: rgba(0, 0, 0, 0.08); /* Thin gray border */
+  --color-luxury-borderHover: rgba(0, 0, 0, 0.16); 
   --color-luxury-textMuted: #86868B;  /* Apple Neutrals Gray */
-  --color-luxury-textLight: #F5F5F7;  /* Apple Neutrals Silver */
+  --color-luxury-textLight: #1D1D1F;  /* Apple Charcoal Header Text */
 
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  --shadow-gold-glow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-gold-glow-lg: 0 10px 40px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-gold-glow: 0 8px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
+  --shadow-gold-glow-lg: 0 10px 40px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
 
   --animate-fade-in: fadeIn 0.5s ease-out forwards;
   --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -60,12 +60,12 @@
 }
 
 body {
-  background-color: #0D0D11;
+  background-color: #F5F5F7;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(92, 61, 46, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(245, 166, 35, 0.08) 0px, transparent 50%);
-  color: #F5F5F7;
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 166, 35, 0.02) 0px, transparent 50%);
+  color: #1D1D1F;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -77,15 +77,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(0, 0, 0, 0.01);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.25);
 }

@@ -61,9 +61,9 @@ export default function GeneratedReview({
       </div>
 
       {/* Quality Score Indicator */}
-      <div className="mb-4 p-3.5 rounded-2xl border border-luxury-border bg-[#1C1C1E]/40 flex items-center justify-between shadow-inner">
+      <div className="mb-4 p-3.5 rounded-2xl border border-luxury-border bg-[#F5F5F7]/50 flex items-center justify-between shadow-inner">
         <div className="flex items-center gap-2.5">
-          <div className="relative w-11 h-11 flex items-center justify-center rounded-full border border-gold-400/25 bg-[#1C1C1E] shadow-sm">
+          <div className="relative w-11 h-11 flex items-center justify-center rounded-full border border-gold-400/25 bg-white shadow-sm">
             <span className="text-xs font-sans font-extrabold text-gold-600">{qualityScore}</span>
             <svg className="absolute inset-0 w-full h-full -rotate-90 scale-[0.85]">
               <circle
@@ -92,7 +92,7 @@ export default function GeneratedReview({
             <p className="text-[9px] text-luxury-textMuted font-bold">Natural phrasing & dish references</p>
           </div>
         </div>
-        <div className="text-right text-[10px] font-sans text-emerald-400 bg-emerald-950/20 px-2.5 py-0.5 rounded-md border border-emerald-800/30 font-bold shadow-sm">
+        <div className="text-right text-[10px] font-sans text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-250 font-bold shadow-sm">
           Premium Quality
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function GeneratedReview({
           onChange={(e) => onChangeText(e.target.value)}
           disabled={isGenerating}
           rows={7}
-          className="w-full flex-1 px-4 py-3 rounded-2xl border border-luxury-border bg-[#1C1C1E] text-luxury-textLight font-sans text-xs sm:text-sm leading-relaxed placeholder-gray-300 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all resize-none shadow-inner"
+          className="w-full flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-luxury-textLight font-sans text-xs sm:text-sm leading-relaxed placeholder-gray-300 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all resize-none shadow-inner"
           placeholder="Generating your draft..."
         />
 
@@ -137,7 +137,7 @@ export default function GeneratedReview({
         <button
           onClick={onRegenerate}
           disabled={isGenerating}
-          className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full border border-luxury-border bg-[#1C1C1E] text-luxury-textLight hover:bg-[#2C2C2E] active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer font-bold shadow-sm"
+          className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full border border-luxury-border bg-[#F5F5F7] text-luxury-textLight hover:bg-[#E5E5EA] active:scale-[0.98] transition-all disabled:opacity-60 cursor-pointer font-bold shadow-sm"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
           <span className="text-xs">Regenerate Draft</span>

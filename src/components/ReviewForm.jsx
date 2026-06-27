@@ -94,7 +94,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
 
       {/* Error Message */}
       {errorMsg && (
-        <div className="p-2.5 text-xs bg-red-950/20 border border-red-800/30 text-red-400 font-sans font-bold rounded-xl text-center shadow-sm">
+        <div className="p-2.5 text-xs bg-red-50 border border-red-200 text-red-700 font-sans font-bold rounded-xl text-center shadow-sm">
           {errorMsg}
         </div>
       )}
@@ -113,7 +113,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 className={`px-3.5 py-1.5 rounded-full border text-[11px] font-sans font-bold transition-all duration-150 cursor-pointer shadow-sm ${
                   isSelected
                     ? 'bg-luxury-dark border-luxury-dark text-white'
-                    : 'bg-[#1C1C1E] border-transparent text-luxury-textLight hover:bg-[#2C2C2E]'
+                    : 'bg-[#F5F5F7] border-transparent text-luxury-textLight hover:bg-[#E5E5EA]'
                 }`}
               >
                 {item}
@@ -124,7 +124,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
       </div>
 
       {/* 2. Rating Selector */}
-      <div className="space-y-1 text-center py-1.5 bg-[#1C1C1E]/60 rounded-2xl border border-luxury-border shadow-inner">
+      <div className="space-y-1 text-center py-1.5 bg-[#F5F5F7]/60 rounded-2xl border border-luxury-border shadow-inner">
         <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">How was your experience?</label>
         
         <div className="flex items-center justify-center gap-1.5 py-1 select-none">
@@ -161,7 +161,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
           <Languages className="w-3.5 h-3.5 text-gold-600" />
           Review Language
         </label>
-        <div className="grid grid-cols-2 gap-1 bg-[#1C1C1E] p-1 rounded-xl border border-luxury-border">
+        <div className="grid grid-cols-2 gap-1 bg-[#F5F5F7] p-1 rounded-xl border border-luxury-border">
           {LANGUAGE_ITEMS.map((lang) => {
             const isSelected = language === lang.id;
             return (
@@ -188,7 +188,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
           <Timer className="w-3.5 h-3.5 text-gold-600" />
           Review Length
         </label>
-        <div className="grid grid-cols-3 gap-1 bg-[#1C1C1E] p-1 rounded-xl border border-luxury-border">
+        <div className="grid grid-cols-3 gap-1 bg-[#F5F5F7] p-1 rounded-xl border border-luxury-border">
           {MODE_ITEMS.map((mode) => {
             const isSelected = reviewMode === mode.id;
             return (
@@ -226,7 +226,7 @@ export default function ReviewForm({ onSubmit, isGenerating }) {
                 className={`px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm ${
                   isSelected
                     ? 'bg-luxury-dark text-white'
-                    : 'bg-[#1C1C1E] text-luxury-textMuted hover:text-luxury-textLight'
+                    : 'bg-[#F5F5F7] text-luxury-textMuted hover:text-luxury-textLight'
                 }`}
               >
                 {tone.label}

@@ -259,8 +259,8 @@ export default function App() {
     <div className="relative min-h-screen flex flex-col justify-between overflow-x-hidden pb-12 select-none bg-luxury-black">
       
       {/* Decorative premium soft glowing orbs */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] bg-gold-400/8 rounded-full blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-luxury-dark/12 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] bg-gold-400/2 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-blue-400/2 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Top Navbar */}
       <header className="w-full max-w-5xl mx-auto px-4 py-4 flex items-center justify-between border-b border-luxury-border relative z-10">
@@ -276,7 +276,7 @@ export default function App() {
         {(currentPage !== 'landing' || showDashboard) && (
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-[#1C1C1E] text-xs text-luxury-textLight hover:bg-[#2C2C2E] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
+            className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-[#F5F5F7] text-xs text-luxury-textLight hover:bg-[#E5E5EA] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Restart</span>
