@@ -6,6 +6,7 @@ import SuccessPopup from './components/SuccessPopup';
 import Toast from './components/Toast';
 import Logo from './components/Logo';
 import Dashboard from './components/Dashboard';
+import PinModal from './components/PinModal';
 import { generateReviewDraft } from './services/gemini';
 import { RotateCcw } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -23,6 +24,7 @@ export default function App() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showPinModal, setShowPinModal] = useState(false);
 
   // User-approved examples list for few-shot learning
   const [userApprovedExamples, setUserApprovedExamples] = useState([]);
@@ -294,7 +296,7 @@ export default function App() {
             {currentPage === 'landing' && (
               <LandingSection 
                 onStart={handleStartReview} 
-                onOpenDashboard={() => setShowDashboard(true)}
+                onOpenDashboard={() => setShowPinModal(true)}
                 onInstantClick={handleInstantReview}
                 isGenerating={isGenerating}
               />
@@ -325,6 +327,12 @@ export default function App() {
         isOpen={isSuccessOpen}
         onClose={() => setIsSuccessOpen(false)}
         googleReviewLink={googleReviewLink}
+      />
+
+      <PinModal
+        isOpen={showPinModal}
+        onClose={() => setShowPinModal(false)}
+        onSuccess={() => setShowDashboard(true)}
       />
 
       {toast && (
