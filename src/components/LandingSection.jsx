@@ -42,11 +42,11 @@ export default function LandingSection({ onStart, onOpenDashboard, onInstantClic
       )}
 
       {/* Main Titles */}
-      <h1 className="font-serif text-3xl sm:text-4.5xl font-bold text-luxury-textLight tracking-wide leading-tight mb-1.5 animate-fade-in">
-        Chapter One Cafe
+      <h1 className="font-serif text-2.5xl sm:text-3.5xl font-bold text-luxury-textLight tracking-wide leading-tight mb-2 animate-fade-in px-4">
+        Welcome back to Chapter One AI Review System
       </h1>
       
-      <p className="font-serif text-sm sm:text-base text-gold-600 tracking-widest uppercase font-bold mb-6">
+      <p className="font-serif text-xs sm:text-sm text-gold-650 tracking-widest uppercase font-bold mb-6">
         Baghpat
       </p>
 
