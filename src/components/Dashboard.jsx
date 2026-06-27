@@ -24,12 +24,12 @@ export default function Dashboard({ onClose }) {
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-gold-600" />
           <h2 className="font-serif text-xl font-bold tracking-wide text-luxury-textLight">
-            Baghpat Analytics Dashboard
+            Chapter One Analytics Dashboard
           </h2>
         </div>
         <button
           onClick={onClose}
-          className="p-1 rounded-lg text-luxury-textMuted hover:text-luxury-textLight hover:bg-black/5 transition-all cursor-pointer"
+          className="p-1 rounded-lg text-luxury-textMuted hover:text-luxury-textLight hover:bg-black/5 transition-all cursor-pointer relative z-20"
           aria-label="Close Dashboard"
         >
           <X className="w-5 h-5" />
