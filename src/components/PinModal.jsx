@@ -6,7 +6,6 @@ export default function PinModal({ isOpen, onClose, onSuccess }) {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) return;
     setPin('');
     setIsError(false);
   }, [isOpen]);
@@ -16,6 +15,7 @@ export default function PinModal({ isOpen, onClose, onSuccess }) {
       if (pin === '160') {
         onSuccess();
         onClose();
+        setPin('');
       } else {
         setIsError(true);
         // Reset after shake animation finishes
