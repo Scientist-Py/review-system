@@ -29,7 +29,14 @@ export default function App() {
   // User-approved examples list for few-shot learning
   const [userApprovedExamples, setUserApprovedExamples] = useState([]);
 
-  const reviewLink = import.meta.env.VITE_GOOGLE_REVIEW_LINK || import.meta.env.VITE_GOOGLE_PLACE_ID || "YOUR_PLACE_ID";
+  let reviewLink = (import.meta.env.VITE_GOOGLE_REVIEW_LINK || import.meta.env.VITE_GOOGLE_PLACE_ID || "YOUR_PLACE_ID").trim();
+  
+  // Clean up accidental key prefix in environment variables (e.g. "VITE_GOOGLE_REVIEW_LINK=...")
+  const envPrefixMatch = reviewLink.match(/^[A-Z0-9_]+=(https?:\/\/.*)$/i) || reviewLink.match(/^[A-Z0-9_]+=(.*)$/i);
+  if (envPrefixMatch) {
+    reviewLink = envPrefixMatch[1].trim();
+  }
+
   const googleReviewLink = (reviewLink.startsWith("http://") || reviewLink.startsWith("https://"))
     ? reviewLink
     : `https://search.google.com/local/writereview?placeid=${reviewLink}`;
