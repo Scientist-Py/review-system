@@ -5,7 +5,7 @@ import Toast from './components/Toast';
 import Dashboard from './components/Dashboard';
 import PinModal from './components/PinModal';
 import { generateReviewDraft } from './services/gemini';
-import { RotateCcw, Sparkles, Star, Languages, Type, Settings, Copy, Check, Info } from 'lucide-react';
+import { RotateCcw, Sparkles, Star, Languages, Type, Settings, Copy, ChevronDown, ChevronUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { analytics } from './utils/analytics';
 
@@ -41,8 +41,12 @@ export default function App() {
   const [language, setLanguage] = useState("English");
   const [writingTone, setWritingTone] = useState("Casual");
   
+  // Customizer visibility
+  const [showCustomizer, setShowCustomizer] = useState(false);
+
   // Generation States
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isInstantGenerating, setIsInstantGenerating] = useState(false);
   const [drafts, setDrafts] = useState(null);
   const [copiedText, setCopiedText] = useState("");
   const [hoverRating, setHoverRating] = useState(0);
@@ -70,7 +74,7 @@ export default function App() {
     ? parsedReviewLink
     : `https://search.google.com/local/writereview?placeid=${parsedReviewLink}`;
 
-  // Log scan and load approved examples & initial drafts on mount
+  // Load approved examples on mount
   useEffect(() => {
     const sessionRecorded = sessionStorage.getItem("scanRecorded");
     if (!sessionRecorded) {
@@ -86,9 +90,6 @@ export default function App() {
     } catch (e) {
       console.warn("Could not load user examples from localStorage:", e);
     }
-
-    // Trigger initial drafts generation so screen isn't empty
-    triggerGeneration(true);
   }, []);
 
   // Trigger boutique gold, charcoal, and white confetti
@@ -135,15 +136,70 @@ export default function App() {
     }
   };
 
-  const triggerGeneration = async (isInitial = false) => {
-    setIsGenerating(true);
-    
-    // Even if selectedItems is empty, pass empty array. Service will use general experience.
-    const payloadItems = isInitial ? ["Pizza", "Cold Coffee"] : selectedItems;
+  const getRandomItems = () => {
+    const items = ["Pizza", "Burger", "Momos", "Cold Coffee", "Staff", "Ambience", "Cleanliness"];
+    const shuffled = [...items].sort(() => 0.5 - Math.random());
+    const count = Math.floor(Math.random() * 2) + 2; // 2 or 3 items
+    return shuffled.slice(0, count);
+  };
 
+  const handleInstantReview = async () => {
+    setIsInstantGenerating(true);
+    const randomItems = getRandomItems();
+    
     try {
       const response = await generateReviewDraft({
-        selectedItems: payloadItems,
+        selectedItems: randomItems,
+        experienceRating: 5,
+        writingTone: "Casual",
+        language: "English",
+        userApprovedExamples
+      });
+
+      const chosenReview = response.normal || response.quick || "Good food and quick service.";
+      
+      // Copy to clipboard
+      await navigator.clipboard.writeText(chosenReview);
+      
+      triggerConfetti();
+      analytics.incrementReviewGenerated(randomItems);
+      analytics.incrementCopyClick();
+
+      try {
+        localStorage.setItem("reviewGenerated", "true");
+        const latestApproved = [...userApprovedExamples];
+        if (!latestApproved.includes(chosenReview) && chosenReview.trim().length > 15) {
+          latestApproved.push(chosenReview);
+          const trimmedList = latestApproved.slice(-6);
+          setUserApprovedExamples(trimmedList);
+          localStorage.setItem(PREFERENCES_KEY, JSON.stringify(trimmedList));
+        }
+      } catch (storageErr) {
+        console.warn("Learning storage failed", storageErr);
+      }
+
+      setActiveReviewText(chosenReview);
+      setIsSuccessOpen(true);
+      showToast("Instant review copied successfully!", "success");
+    } catch (err) {
+      console.error(err);
+      const fallbackText = "Good place, nice cheesy pizza and quick service. Will visit again.";
+      await navigator.clipboard.writeText(fallbackText);
+      triggerConfetti();
+      setActiveReviewText(fallbackText);
+      setIsSuccessOpen(true);
+      showToast("Copied fallback review.", "info");
+    } finally {
+      setIsInstantGenerating(false);
+    }
+  };
+
+  const triggerCustomGeneration = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const response = await generateReviewDraft({
+        selectedItems,
         experienceRating,
         writingTone,
         language,
@@ -156,20 +212,18 @@ export default function App() {
         detailed: response.detailed
       });
 
-      if (!isInitial) {
-        analytics.incrementReviewGenerated(payloadItems);
-        if (response.source === 'fallback') {
-          showToast("Drafts ready! (Local generator used)", "info");
-        } else {
-          showToast("AI Review Drafts ready!", "success");
-        }
+      analytics.incrementReviewGenerated(selectedItems);
+      if (response.source === 'fallback') {
+        showToast("Drafts ready! (Local generator used)", "info");
+      } else {
+        showToast("AI Review Drafts ready!", "success");
       }
     } catch (error) {
       console.error(error);
       setDrafts({
-        quick: "Nice food and quick service. Will visit again.",
-        normal: "Loved the cheesy pizza and refreshing cold coffee. The staff was polite and service was quick. Nice spot.",
-        detailed: "Visited Chapter One Cafe today. The pizza was super cheesy and loaded with toppings. Cold coffee was refreshingly sweet. Seating was comfortable and vibes were very cozy. Highly recommended spot in Baghpat."
+        quick: "Nice food and quick service.",
+        normal: "Loved the cheesy pizza and cold coffee. Seating is nice. Good service.",
+        detailed: "Good experience at Chapter One Cafe. Cheesy pizza was very tasty and cold coffee was refreshing. Staff was polite. Cozy place."
       });
       showToast("Generation failed. Loaded fallback drafts.", "warning");
     } finally {
@@ -214,7 +268,7 @@ export default function App() {
     setDrafts(null);
     setToast(null);
     setShowDashboard(false);
-    triggerGeneration(true);
+    setShowCustomizer(false);
   };
 
   const getRatingLabel = (val) => {
@@ -234,7 +288,7 @@ export default function App() {
       <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-blue-400/2 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <header className="w-full max-w-6xl mx-auto px-4 py-4 flex items-center justify-between border-b border-luxury-border relative z-10">
+      <header className="w-full max-w-4xl mx-auto px-4 py-4 flex items-center justify-between border-b border-luxury-border relative z-10">
         <div onClick={handleReset} className="flex items-center gap-2 cursor-pointer">
           <Logo className="w-9 h-9" />
           <div className="text-left">
@@ -267,262 +321,273 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6 relative z-10">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-8 relative z-10 flex flex-col items-center justify-center">
         
         {showDashboard ? (
-          <Dashboard onClose={() => setShowDashboard(false)} />
+          <div className="w-full">
+            <Dashboard onClose={() => setShowDashboard(false)} />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="w-full max-w-md space-y-6 text-center">
             
-            {/* Left Column: Review Form Controls (4 cols) */}
-            <div className="lg:col-span-5 w-full p-6 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow-lg space-y-5 animate-slide-up">
-              
-              {/* Header Title */}
+            {/* 1. Large Logo and Branding */}
+            <div className="flex flex-col items-center space-y-3 animate-fade-in">
+              <Logo className="w-24 h-24 shadow-gold-glow" />
               <div>
-                <h2 className="font-serif text-xl font-bold tracking-wide flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-gold-600" />
+                <h1 className="font-serif text-2.5xl sm:text-3.5xl font-extrabold tracking-wide text-luxury-textLight">
+                  Chapter One Cafe
+                </h1>
+                <p className="text-xs font-sans font-bold text-gold-600 tracking-widest uppercase mt-0.5">
                   AI Review Assistant
-                </h2>
-                <p className="text-[10px] text-luxury-textMuted font-sans font-bold">Select details below to generate custom drafts.</p>
+                </p>
               </div>
+            </div>
 
-              {/* 1. Checklist: What did you enjoy? */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">What did you enjoy?</label>
-                <div className="flex flex-wrap gap-1.5 select-none">
-                  {CHECKLIST_ITEMS.map((item) => {
-                    const isSelected = selectedItems.includes(item);
-                    return (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => handleItemToggle(item)}
-                        className={`px-3 py-1.5 rounded-xl border text-[11px] font-sans font-bold transition-all duration-150 cursor-pointer shadow-sm ${
-                          isSelected
-                            ? 'bg-luxury-dark border-luxury-dark text-white'
-                            : 'bg-[#F5F5F7] border-transparent text-luxury-textLight hover:bg-[#E5E5EA]'
-                        }`}
-                      >
-                        {item}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 2. Rating Selector */}
-              <div className="space-y-1 text-center py-2 bg-[#F5F5F7]/60 rounded-2xl border border-luxury-border shadow-inner">
-                <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">How was your experience?</label>
-                
-                <div className="flex items-center justify-center gap-1.5 py-1 select-none">
-                  {[1, 2, 3, 4, 5].map((star) => {
-                    const active = star <= (hoverRating || experienceRating);
-                    return (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => setExperienceRating(star)}
-                        onMouseEnter={() => setHoverRating(star)}
-                        onMouseLeave={() => setHoverRating( star => star )}
-                        className="p-0.5 transition-transform active:scale-90 cursor-pointer"
-                      >
-                        <Star
-                          className={`w-7.5 h-7.5 transition-all ${
-                            active
-                              ? 'fill-gold-400 stroke-gold-500 drop-shadow-[0_0_3px_rgba(255,215,0,0.3)]'
-                              : 'stroke-gray-300 fill-transparent hover:stroke-gold-400'
-                          }`}
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-                <span className="text-[10px] font-sans font-bold text-gold-600 uppercase opacity-95">
-                  {getRatingLabel(hoverRating || experienceRating) || "Rate Us"}
-                </span>
-              </div>
-
-              {/* 3. Language Selector */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
-                  <Languages className="w-3.5 h-3.5 text-gold-600" />
-                  Review Language
-                </label>
-                <div className="grid grid-cols-2 gap-1 bg-[#F5F5F7] p-1 rounded-xl border border-luxury-border">
-                  {LANGUAGE_ITEMS.map((lang) => {
-                    const isSelected = language === lang.id;
-                    return (
-                      <button
-                        key={lang.id}
-                        type="button"
-                        onClick={() => setLanguage(lang.id)}
-                        className={`py-1.5 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
-                          isSelected
-                            ? 'bg-luxury-dark text-white'
-                            : 'text-luxury-textMuted hover:text-luxury-textLight'
-                        }`}
-                      >
-                        {lang.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 4. Tone Selector */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
-                  <Type className="w-3.5 h-3.5 text-gold-600" />
-                  Writing Tone
-                </label>
-                <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar select-none">
-                  {TONE_ITEMS.map((tone) => {
-                    const isSelected = writingTone === tone.id;
-                    return (
-                      <button
-                        key={tone.id}
-                        type="button"
-                        onClick={() => setWritingTone(tone.id)}
-                        className={`px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm ${
-                          isSelected
-                            ? 'bg-luxury-dark text-white'
-                            : 'bg-[#F5F5F7] text-luxury-textMuted hover:text-luxury-textLight'
-                        }`}
-                      >
-                        {tone.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Generate Button */}
+            {/* 2. Simple Landing Action Buttons */}
+            <div className="p-6 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow-lg space-y-4 animate-slide-up">
+              
+              {/* Primary Instant Review Button */}
               <button
-                onClick={() => triggerGeneration(false)}
-                disabled={isGenerating}
-                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                onClick={handleInstantReview}
+                disabled={isInstantGenerating}
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isGenerating ? (
+                {isInstantGenerating ? (
                   <div className="flex items-center gap-2 text-sm">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Generating Review Drafts...</span>
+                    <span>Preparing Review Draft...</span>
                   </div>
                 ) : (
                   <>
-                    <Sparkles className="w-4.5 h-4.5 fill-white stroke-white" />
-                    <span className="text-sm">Generate Review Drafts</span>
+                    <Sparkles className="w-4.5 h-4.5 text-amber-400 fill-amber-400" />
+                    <span className="text-sm">Post Instant Review</span>
                   </>
                 )}
               </button>
 
+              {/* Secondary Customizer Toggle Button */}
+              <button
+                onClick={() => setShowCustomizer(!showCustomizer)}
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full border border-luxury-border bg-[#F5F5F7] text-luxury-textLight hover:bg-[#E5E5EA] active:scale-[0.98] transition-all font-bold shadow-sm cursor-pointer text-xs"
+              >
+                <span>Customize Review</span>
+                {showCustomizer ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
+
             </div>
 
-            {/* Right Column: Draft Options (7 cols) */}
-            <div className="lg:col-span-7 w-full space-y-4">
-              
-              {/* Header Info */}
-              <div className="flex items-center justify-between px-1">
-                <span className="text-[10px] uppercase font-sans font-extrabold tracking-wider text-gold-600">Generated Review Options</span>
-                <span className="text-[9px] font-sans text-luxury-textMuted font-bold flex items-center gap-1">
-                  <Info className="w-3 h-3 text-gold-600" />
-                  Select your favorite draft to copy & post.
-                </span>
-              </div>
-
-              {/* Loader Skeleton Grid */}
-              {isGenerating && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {[1, 2, 3].map((idx) => (
-                    <div key={idx} className="p-5 h-[230px] rounded-3xl border border-luxury-border bg-luxury-card/50 shadow-sm animate-pulse flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <div className="h-4 w-24 bg-gray-200 rounded-lg"></div>
-                        <div className="h-3 w-full bg-gray-200 rounded-lg"></div>
-                        <div className="h-3 w-5/6 bg-gray-200 rounded-lg"></div>
-                        <div className="h-3 w-4/5 bg-gray-200 rounded-lg"></div>
-                      </div>
-                      <div className="h-9 w-full bg-gray-200 rounded-xl"></div>
-                    </div>
-                  ))}
+            {/* 3. Expandable Customizer Section */}
+            {showCustomizer && (
+              <div className="w-full p-6 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow-lg space-y-5 animate-slide-up text-left">
+                <div>
+                  <h3 className="font-serif text-lg font-bold tracking-wide">
+                    Configure Custom Review
+                  </h3>
+                  <p className="text-[10px] text-luxury-textMuted font-sans font-bold">Select details below to generate specific drafts.</p>
                 </div>
-              )}
 
-              {/* Options Grid */}
-              {!isGenerating && drafts && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+                {/* Checklist: What did you enjoy? */}
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">What did you enjoy?</label>
+                  <div className="flex flex-wrap gap-1.5 select-none">
+                    {CHECKLIST_ITEMS.map((item) => {
+                      const isSelected = selectedItems.includes(item);
+                      return (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => handleItemToggle(item)}
+                          className={`px-3 py-1.5 rounded-xl border text-[11px] font-sans font-bold transition-all duration-150 cursor-pointer shadow-sm ${
+                            isSelected
+                              ? 'bg-luxury-dark border-luxury-dark text-white'
+                              : 'bg-[#F5F5F7] border-transparent text-luxury-textLight hover:bg-[#E5E5EA]'
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Rating Selector */}
+                <div className="space-y-1 text-center py-2 bg-[#F5F5F7]/60 rounded-2xl border border-luxury-border shadow-inner">
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">How was your experience?</label>
                   
-                  {/* Option 1: Quick */}
-                  <div className="flex flex-col justify-between p-4 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow hover:border-luxury-borderHover transition-all">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="px-2 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Quick</span>
-                        <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.quick.split(/\s+/).length} words</span>
-                      </div>
-                      <textarea
-                        value={drafts.quick}
-                        onChange={(e) => setDrafts({ ...drafts, quick: e.target.value })}
-                        className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[110px]"
-                      />
-                    </div>
-                    <button
-                      onClick={() => handlePostReviewClick(drafts.quick)}
-                      className="mt-3 flex items-center justify-center gap-1.5 py-2 px-3 rounded-2xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>{copiedText === drafts.quick ? "Copied!" : "Copy & Post"}</span>
-                    </button>
+                  <div className="flex items-center justify-center gap-1.5 py-1 select-none">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const active = star <= (hoverRating || experienceRating);
+                      return (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setExperienceRating(star)}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          className="p-0.5 transition-transform active:scale-90 cursor-pointer"
+                        >
+                          <Star
+                            className={`w-7.5 h-7.5 transition-all ${
+                              active
+                                ? 'fill-gold-400 stroke-gold-500 drop-shadow-[0_0_3px_rgba(255,215,0,0.3)]'
+                                : 'stroke-gray-300 fill-transparent hover:stroke-gold-400'
+                            }`}
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
-
-                  {/* Option 2: Normal */}
-                  <div className="flex flex-col justify-between p-4 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow hover:border-luxury-borderHover transition-all relative md:scale-[1.02]">
-                    <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2">
-                      <span className="px-2.5 py-0.5 text-[8px] uppercase tracking-widest font-extrabold text-white bg-gold-600 rounded-full shadow-md animate-pulse-subtle">Popular</span>
-                    </div>
-                    <div className="mt-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="px-2 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Casual</span>
-                        <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.normal.split(/\s+/).length} words</span>
-                      </div>
-                      <textarea
-                        value={drafts.normal}
-                        onChange={(e) => setDrafts({ ...drafts, normal: e.target.value })}
-                        className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[110px]"
-                      />
-                    </div>
-                    <button
-                      onClick={() => handlePostReviewClick(drafts.normal)}
-                      className="mt-3 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full shadow-sm"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>{copiedText === drafts.normal ? "Copied!" : "Copy & Post"}</span>
-                    </button>
-                  </div>
-
-                  {/* Option 3: Detailed */}
-                  <div className="flex flex-col justify-between p-4 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow hover:border-luxury-borderHover transition-all">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="px-2 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Foodie</span>
-                        <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.detailed.split(/\s+/).length} words</span>
-                      </div>
-                      <textarea
-                        value={drafts.detailed}
-                        onChange={(e) => setDrafts({ ...drafts, detailed: e.target.value })}
-                        className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[110px]"
-                      />
-                    </div>
-                    <button
-                      onClick={() => handlePostReviewClick(drafts.detailed)}
-                      className="mt-3 flex items-center justify-center gap-1.5 py-2 px-3 rounded-2xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>{copiedText === drafts.detailed ? "Copied!" : "Copy & Post"}</span>
-                    </button>
-                  </div>
-
+                  <span className="text-[10px] font-sans font-bold text-gold-600 uppercase opacity-95">
+                    {getRatingLabel(hoverRating || experienceRating) || "Rate Us"}
+                  </span>
                 </div>
-              )}
 
-            </div>
+                {/* Language Selector */}
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
+                    <Languages className="w-3.5 h-3.5 text-gold-600" />
+                    Review Language
+                  </label>
+                  <div className="grid grid-cols-2 gap-1 bg-[#F5F5F7] p-1 rounded-xl border border-luxury-border">
+                    {LANGUAGE_ITEMS.map((lang) => {
+                      const isSelected = language === lang.id;
+                      return (
+                        <button
+                          key={lang.id}
+                          type="button"
+                          onClick={() => setLanguage(lang.id)}
+                          className={`py-1.5 px-1 rounded-lg text-[10px] font-sans font-bold transition-all text-center cursor-pointer ${
+                            isSelected
+                              ? 'bg-luxury-dark text-white'
+                              : 'text-luxury-textMuted hover:text-luxury-textLight'
+                          }`}
+                        >
+                          {lang.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Tone Selector */}
+                <div className="space-y-1.5">
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
+                    <Type className="w-3.5 h-3.5 text-gold-600" />
+                    Writing Tone
+                  </label>
+                  <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar select-none">
+                    {TONE_ITEMS.map((tone) => {
+                      const isSelected = writingTone === tone.id;
+                      return (
+                        <button
+                          key={tone.id}
+                          type="button"
+                          onClick={() => setWritingTone(tone.id)}
+                          className={`px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm ${
+                            isSelected
+                              ? 'bg-luxury-dark text-white'
+                              : 'bg-[#F5F5F7] text-luxury-textMuted hover:text-luxury-textLight'
+                          }`}
+                        >
+                          {tone.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Custom Generate Button */}
+                <button
+                  onClick={triggerCustomGeneration}
+                  disabled={isGenerating}
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {isGenerating ? (
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Generating Review Drafts...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4.5 h-4.5 fill-white stroke-white" />
+                      <span className="text-sm">Generate Review Drafts</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Customizer Generated Options Display */}
+                {!isGenerating && drafts && (
+                  <div className="space-y-3 pt-3 border-t border-luxury-border">
+                    <span className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 text-center">Select your favorite option</span>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                      {/* 1. Quick Option */}
+                      <div className="p-4 rounded-2xl border border-luxury-border bg-white shadow-sm flex flex-col justify-between">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Quick Option</span>
+                          <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.quick.split(/\s+/).length} words</span>
+                        </div>
+                        <textarea
+                          value={drafts.quick}
+                          onChange={(e) => setDrafts({ ...drafts, quick: e.target.value })}
+                          className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[65px]"
+                        />
+                        <button
+                          onClick={() => handlePostReviewClick(drafts.quick)}
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>{copiedText === drafts.quick ? "Copied!" : "Copy & Post"}</span>
+                        </button>
+                      </div>
+
+                      {/* 2. Casual Option */}
+                      <div className="p-4 rounded-2xl border border-gold-400/30 bg-white shadow-md flex flex-col justify-between relative">
+                        <div className="absolute top-0 right-4 translate-y-[-50%] bg-gold-600 text-white text-[7px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Popular</div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Casual Option</span>
+                          <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.normal.split(/\s+/).length} words</span>
+                        </div>
+                        <textarea
+                          value={drafts.normal}
+                          onChange={(e) => setDrafts({ ...drafts, normal: e.target.value })}
+                          className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[65px]"
+                        />
+                        <button
+                          onClick={() => handlePostReviewClick(drafts.normal)}
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>{copiedText === drafts.normal ? "Copied!" : "Copy & Post"}</span>
+                        </button>
+                      </div>
+
+                      {/* 3. Detailed Option */}
+                      <div className="p-4 rounded-2xl border border-luxury-border bg-white shadow-sm flex flex-col justify-between">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Foodie Option</span>
+                          <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.detailed.split(/\s+/).length} words</span>
+                        </div>
+                        <textarea
+                          value={drafts.detailed}
+                          onChange={(e) => setDrafts({ ...drafts, detailed: e.target.value })}
+                          className="w-full text-xs font-sans text-luxury-textLight bg-transparent border-0 resize-none focus:ring-0 focus:outline-none leading-relaxed h-[65px]"
+                        />
+                        <button
+                          onClick={() => handlePostReviewClick(drafts.detailed)}
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>{copiedText === drafts.detailed ? "Copied!" : "Copy & Post"}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+
+              </div>
+            )}
 
           </div>
         )}
