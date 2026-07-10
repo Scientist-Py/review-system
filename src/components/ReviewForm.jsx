@@ -20,9 +20,9 @@ const TONE_ITEMS = [
 ];
 
 const MODE_ITEMS = [
-  { id: "Quick", label: "Quick (20-40w)" },
-  { id: "Normal", label: "Normal (50-80w)" },
-  { id: "Detailed", label: "Detailed (100-150w)" }
+  { id: "Quick", label: "Quick (10-20w)" },
+  { id: "Normal", label: "Normal (20-40w)" },
+  { id: "Detailed", label: "Detailed (40-60w)" }
 ];
 
 const LANGUAGE_ITEMS = [

@@ -18,12 +18,12 @@ export async function generateReviewDraft({
     : "overall experience";
 
   const lengthGuides = {
-    "Quick": "20 to 40 words",
-    "Normal": "50 to 80 words",
-    "Detailed": "100 to 150 words"
+    "Quick": "10 to 20 words",
+    "Normal": "20 to 40 words",
+    "Detailed": "40 to 60 words"
   };
 
-  const chosenLengthGuide = lengthGuides[reviewMode] || "50 to 80 words";
+  const chosenLengthGuide = lengthGuides[reviewMode] || "20 to 40 words";
 
   // Smart prompt triggers based on dish/items selected
   let smartTriggers = "";
@@ -79,14 +79,14 @@ Your task is to generate ONE realistic customer review based on the information 
 
 IMPORTANT GOAL:
 The review must feel like it was written by a genuine customer, not by AI.
+It must sound like a real person writing a quick review on Google Maps, not a professional blogger or marketing agent.
 
 ABSOLUTE RULES:
 * Every review must be unique.
 * Never reuse sentence structures repeatedly.
 * Never use templates.
-* Never sound like an advertisement.
-* Never sound promotional.
-* Never sound corporate.
+* Never sound like an advertisement or promotional/marketing copy.
+* Never sound corporate or professional.
 * Never use emojis.
 * Never use hashtags.
 * Never use bullet points.
@@ -96,7 +96,8 @@ ABSOLUTE RULES:
 * Never force positivity.
 * Match the customer's actual ratings and experience.
 
-CRITICAL REALISM RULES:
+CRITICAL REALISM & NATURAL LANGUAGE RULES:
+* DO NOT use fancy vocabulary or elaborate adjectives (like "delightful", "impeccable", "epitome", "ambassador", "savored", "mouthwatering", "nestled", "establishment", "culinary", "experience was enhanced", "highly recommend", "must-visit").
 * Do NOT start reviews with: "Just dropped by", "Stopped by", "Quick stopover", "On a recent visit", "While visiting", "Decided to try", "Food enthusiast", "Visited this cafe", "Had the pleasure of visiting".
 * Do NOT sound like a food blogger, travel reviewer, or marketing content.
 * Avoid these forbidden words/phrases: "moreover", "furthermore", "additionally", "aesthetic details", "luxury theme", "exceptional", "outstanding", "remarkable", "highly recommended".
@@ -149,7 +150,7 @@ Some reviews should focus mostly on overall experience.
 Some reviews should mention multiple aspects.
 
 TARGET LENGTH GUIDE:
-- Target review length: ${chosenLengthGuide}
+- Target review length: ${chosenLengthGuide} (Keep it extremely concise. Do not add extra words just to hit the word limit; it's better to be too short than too long).
 
 WRITING PERSONALITIES & TONE:
 - Write in this tone: ${writingTone}
@@ -157,30 +158,30 @@ WRITING PERSONALITIES & TONE:
 
 FOOD MENTION RULES:
 Only mention dishes selected by the customer.
-When mentioning dishes:
-- Pizza: Mention size, cheese, toppings, freshness, sharing with friends or family.
-- 17 Inch Pizza: Mention large size, suitable for groups, loaded toppings, filling portions.
-- Burger: Mention freshness, filling portions, soft buns, taste.
+When mentioning dishes, describe them simply, like a normal person:
+- Pizza: Mention size, cheese, toppings, sharing.
+- 17 Inch Pizza: Mention large size, suitable for groups, loaded toppings.
+- Burger: Mention freshness, soft buns, taste.
 - Cold Coffee: Mention refreshing taste, balanced sweetness, chilled serving.
-- Momos: Mention hot serving, texture, stuffing, flavor.
-- Wheat Momos: Mention healthy option naturally.
-- Wheat Burger: Mention healthy option naturally.
-- Pasta: Mention creamy texture, flavor, portion size.
+- Momos: Mention hot serving, stuffing, flavor.
+- Wheat Momos: Mention healthy option.
+- Wheat Burger: Mention healthy option.
+- Pasta: Mention creamy texture, flavor.
 - French Fries: Mention crispiness.
-- Sandwich: Mention freshness and filling.
-- Wrap: Mention balanced ingredients and taste.
+- Sandwich: Mention freshness.
+- Wrap: Mention taste.
 
 STAFF RULES:
 When staff is selected:
-Mention one or more: polite behavior, quick service, helpful staff, attentive service, friendly interaction. Do not repeat the same phrases often.
+Mention politely that service was quick, staff was helpful/friendly, or service was fast. Keep it simple.
 
 AMBIENCE RULES:
 When ambience is selected:
-Mention one or more: cozy atmosphere, comfortable seating, warm lighting, relaxing vibe, peaceful environment, good place to spend time, suitable for friends or family. Do not always use the same descriptions.
+Mention cozy atmosphere, good seating, nice place to sit, or good vibes. Avoid flowery language.
 
 CLEANLINESS RULES:
 When cleanliness is selected:
-Mention one or more: clean tables, hygienic environment, neat setup, well-maintained space. Do not overemphasize hygiene every time.
+Mention cafe was clean or tables were neat.
 
 REALISM RULES:
 Make reviews feel imperfectly human.
@@ -308,37 +309,36 @@ function generateFallbackReview({
   
   const name = Math.random() < 0.3 ? nameOptions[0] : selectRandom(nameOptions.slice(1));
 
-  // Simple customer starters that do not start with the banned phrases
+  // Simple customer starters
   const englishStarters = [
-    `Had a good experience at ${name}.`,
-    `Nice time at ${name} today.`,
-    `Always a nice hangout spot.`,
-    `Food at ${name} is quite good.`,
-    `Tried this spot with friends.`,
-    `A nice little cafe in Baghpat.`
+    `Good place.`,
+    `Nice experience at ${name}.`,
+    `Really nice spot to hangout.`,
+    `Tried this cafe today.`,
+    `Great food and vibes.`
   ];
 
   const englishItemPhrases = {
     "Pizza": [
-      "Pizza was loaded with cheese and tasted very good.",
-      "The pizza was hot and cheesy, perfect for sharing.",
-      "Loved the pizza size and toppings."
+      "Pizza was really cheesy and tasty.",
+      "The pizza was hot and cheesy, loved it.",
+      "Good pizza size and toppings."
     ],
     "Cold Coffee": [
       "Cold coffee was refreshing and had good sweetness.",
-      "Nice cold coffee, perfect sweetness and chilled.",
-      "Cold coffee was top class and very refreshing."
+      "Nice cold coffee, perfect taste and chilled.",
+      "Cold coffee was very refreshing."
     ],
-    "Burger": ["Burger was fresh, filling, and tasted nice.", "Loved the fresh burger bun and filling portions."],
-    "Momos": ["Momos were hot, fresh, and had good stuffing.", "Wheat momos tasted really good and fresh."],
+    "Burger": ["Burger was fresh and tasted nice.", "Loved the fresh burger bun and filling portion."],
+    "Momos": ["Momos were hot, fresh, and tasty.", "Wheat momos tasted really good and fresh."],
     "Staff": ["Staff was polite and service was quick.", "Service was quick and staff was friendly."],
-    "Ambience": ["Seating arrangement is comfortable and lighting is nice.", "Nice seating and comfortable atmosphere."],
-    "Cleanliness": ["Cafe is clean and well maintained.", "Tables were clean and the environment was tidy."]
+    "Ambience": ["Seating arrangement is comfortable and lighting is nice.", "Nice seating and comfortable vibe."],
+    "Cleanliness": ["Cafe is clean.", "Tables were clean and the environment was tidy."]
   };
 
   const englishGeneralPositive = [
     "Overall experience was good.",
-    "Will visit again with family.",
+    "Will visit again.",
     "Nice experience overall."
   ];
 
@@ -346,26 +346,25 @@ function generateFallbackReview({
     `${name} kafi badhiya spot hai.`,
     `${name} mein badhiya time spend kiya.`,
     `Baghpat mein ye cafe kafi sahi hai.`,
-    `Friends ke saath hang out karne ke liye achha spot hai.`,
-    `Family ke saath dinner ke liye gye the.`
+    `Friends ke saath hang out karne ke liye achha spot hai.`
   ];
 
   const hinglishItemPhrases = {
     "Pizza": [
       "Pizza ka taste expected se better tha aur size bhi bada tha.",
       "Pizza super cheesy tha aur taste next level tha.",
-      "Garam pizza aur badhiya toppings, maza aa gaya share karke."
+      "Garam pizza aur badhiya toppings, maza aa gaya."
     ],
     "Cold Coffee": [
       "Cold coffee kafi refreshing thi aur sweetness balanced thi.",
-      "Cold coffee thandi aur sweet thi, bilkul perfect taste.",
+      "Cold coffee thandi aur sweet thi, perfect taste.",
       "Maza aa gaya cold coffee pee kar."
     ],
-    "Burger": ["Burger kafi fresh aur heavy tha, taste badhiya tha.", "Burger filling aur tasty tha."],
-    "Momos": ["Momos ekdum garam aur tasty filling ke saath serve kiye.", "Wheat momos kafi soft aur delicious the."],
-    "Staff": ["Staff polite tha aur service bhi kafi fast thi.", "Service kafi smooth aur quick thi."],
-    "Ambience": ["Seating comfort aur environment kafi relaxed tha.", "Cozy atmosphere tha aur seating badhiya thi."],
-    "Cleanliness": ["Cafe ekdum clean aur hygienic setup ke saath tha.", "Clean tables aur hygiene sahi thi."]
+    "Burger": ["Burger kafi fresh tha, taste badhiya tha.", "Burger tasty tha."],
+    "Momos": ["Momos ekdum garam aur tasty the.", "Wheat momos kafi soft aur delicious the."],
+    "Staff": ["Staff polite tha aur service bhi kafi fast thi.", "Service kafi quick thi."],
+    "Ambience": ["Seating comfortable thi aur atmosphere relaxed tha.", "Cozy vibe tha aur seating badhiya thi."],
+    "Cleanliness": ["Cafe ekdum clean aur hygienic setup ke saath tha.", "Clean tables aur safai sahi thi."]
   };
 
   const hinglishGeneralPositive = [
