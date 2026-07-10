@@ -1,12 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 /**
- * Generates a review draft using the Gemini API, with a robust local fallback generator.
+ * Generates three review drafts (Quick, Normal, Detailed) in a single call using Gemini JSON mode or a local fallback.
  */
 export async function generateReviewDraft({
   selectedItems,
   experienceRating,
-  reviewMode,
   writingTone,
   language = "English",
   userApprovedExamples = []
@@ -17,49 +16,11 @@ export async function generateReviewDraft({
     ? selectedItems.join(", ") 
     : "overall experience";
 
-  const lengthGuides = {
-    "Quick": "10 to 20 words",
-    "Normal": "20 to 40 words",
-    "Detailed": "40 to 60 words"
-  };
-
-  const chosenLengthGuide = lengthGuides[reviewMode] || "20 to 40 words";
-
-  // Smart prompt triggers based on dish/items selected
-  let smartTriggers = "";
-  if (selectedItems.includes("Pizza") || selectedItems.includes("17 Inch Pizza")) {
-    smartTriggers += "- Mention that the Pizza was large in size, had perfect cheese, and is great for sharing with friends/family.\n";
-  }
-  if (selectedItems.includes("Cold Coffee")) {
-    smartTriggers += "- Mention that the Cold Coffee was extremely refreshing with balanced sweetness.\n";
-  }
-  if (selectedItems.includes("Staff")) {
-    smartTriggers += "- Highlight the staff's polite behaviour and quick service speed.\n";
-  }
-  if (selectedItems.includes("Ambience")) {
-    smartTriggers += "- Mention the cozy and premium layout, perfect lighting, and good background music.\n";
-  }
-  if (selectedItems.includes("Cleanliness")) {
-    smartTriggers += "- Note the hygienic environment and spotless tables.\n";
-  }
-
-  // Random prompt modifier to force extreme variation (satisfying "must look fully different not same")
-  const randomModifiers = [
-    "Start the review with a question about the food or experience.",
-    "Start the review with a casual exclamation like 'What a find!' or 'Superb experience!'",
-    "Describe the visit like a small story of dropping by during the day.",
-    "Focus on details of the sensory experience (taste, comfort, sound).",
-    "Focus heavily on the cafe's location details relative to the landmarks right at the beginning.",
-    "Write in a direct, punchy style with short sentences.",
-    "Structure it around how the selected items exceeded expectations."
-  ];
-  const chosenModifier = randomModifiers[Math.floor(Math.random() * randomModifiers.length)];
-
   // Inject user approved examples for few-shot learning
   let learningBlock = "";
   if (userApprovedExamples && userApprovedExamples.length > 0) {
     learningBlock = `\nLEARN FROM USER PREFERENCES (Few-shot learning):
-Here are examples of previous reviews edited and approved by users at this cafe. Study their tone, style, and structure, and draft a new one reflecting this preferred style:
+Here are examples of previous reviews edited and approved by users at this cafe. Study their tone, style, and structure, and draft new ones reflecting this preferred style:
 ${userApprovedExamples.slice(-3).map((ex, idx) => `Preference Example ${idx + 1}: ${ex}`).join("\n")}
 `;
   }
@@ -72,13 +33,19 @@ ${userApprovedExamples.slice(-3).map((ex, idx) => `Preference Example ${idx + 1}
   ];
   const chosenPersonality = personalities[Math.floor(Math.random() * personalities.length)];
 
-  // Construct the prompt
-  const prompt = `You are an expert review-writing assistant helping real restaurant customers turn their experience into a natural Google review draft.
+  // Construct the JSON prompt
+  const prompt = `You are an expert review-writing assistant helping real restaurant customers turn their experience into natural Google review drafts.
 
-Your task is to generate ONE realistic customer review based on the information provided.
+Your task is to generate THREE realistic customer review drafts of different lengths: "quick", "normal", and "detailed".
+You must return the result ONLY as a JSON object matching this schema:
+{
+  "quick": "A very short review (10 to 20 words, typically 1 sentence)",
+  "normal": "A normal review (20 to 40 words, typically 1 to 2 sentences)",
+  "detailed": "A more detailed review (40 to 60 words, typically 2 to 3 sentences)"
+}
 
 IMPORTANT GOAL:
-The review must feel like it was written by a genuine customer, not by AI.
+Each review draft must feel like it was written by a genuine customer, not by AI.
 It must sound like a real person writing a quick review on Google Maps, not a professional blogger or marketing agent.
 
 ABSOLUTE RULES:
@@ -102,7 +69,6 @@ CRITICAL REALISM & NATURAL LANGUAGE RULES:
 * Do NOT sound like a food blogger, travel reviewer, or marketing content.
 * Avoid these forbidden words/phrases: "moreover", "furthermore", "additionally", "aesthetic details", "luxury theme", "exceptional", "outstanding", "remarkable", "highly recommended".
 * Most reviews must be written in simple everyday language.
-* Reviews should contain 1 to 3 short sentences, basic vocabulary, and a casual tone.
 * Study these examples of natural, simple customer review styles and write in a similar tone:
   - Good food and nice ambience.
   - Pizza was really good.
@@ -131,26 +97,6 @@ CRITICAL REALISM & NATURAL LANGUAGE RULES:
   - Pizza size was impressive.
   - Food was served hot and fresh.
   - Nice experience overall.
-
-VARIETY RULES:
-Randomly vary:
-* Opening sentence style
-* Sentence length
-* Vocabulary
-* Review structure
-* Writing personality
-* Review focus
-
-Do not always mention every aspect.
-Some reviews should focus mostly on food.
-Some reviews should focus mostly on ambience.
-Some reviews should focus mostly on staff.
-Some reviews should focus mostly on cleanliness.
-Some reviews should focus mostly on overall experience.
-Some reviews should mention multiple aspects.
-
-TARGET LENGTH GUIDE:
-- Target review length: ${chosenLengthGuide} (Keep it extremely concise. Do not add extra words just to hit the word limit; it's better to be too short than too long).
 
 WRITING PERSONALITIES & TONE:
 - Write in this tone: ${writingTone}
@@ -222,57 +168,47 @@ CUSTOMER VISIT DATA:
 - Selected Language: ${language}
 ${learningBlock}
 
-FINAL OUTPUT RULES:
-Return ONLY the review text.
-No titles.
-No explanations.
-No labels.
-No ratings.
-No extra formatting.
-
-Generate a natural review that feels genuinely written by a customer who actually visited the restaurant.`;
+Return ONLY a valid JSON object matching the requested schema. No markdown formatting outside of JSON.`;
 
   // If API key is available, attempt Gemini generation
   if (apiKey && apiKey.trim() !== "" && apiKey !== "YOUR_GEMINI_API_KEY") {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        generationConfig: { responseMimeType: "application/json" }
+      });
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
       let text = response.text();
       
-      // Clean up response if the model accidentally included quotes or emojis
-      text = cleanGeneratedText(text);
-      
-      if (text && text.trim().length > 10) {
+      const parsed = JSON.parse(text);
+      if (parsed.quick && parsed.normal && parsed.detailed) {
         return {
-          text: text.trim(),
-          source: "gemini",
-          toneUsed: writingTone,
-          modeUsed: reviewMode
+          quick: cleanGeneratedText(parsed.quick),
+          normal: cleanGeneratedText(parsed.normal),
+          detailed: cleanGeneratedText(parsed.detailed),
+          source: "gemini"
         };
       }
     } catch (error) {
-      console.error("Gemini API generation failed, running fallback generator:", error);
+      console.error("Gemini API generation or JSON parsing failed, running fallback generator:", error);
     }
   }
 
   // Local fallback generator if API fails or is not configured
-  const fallbackText = generateFallbackReview({
+  const fallbackOptions = generateFallbackReviews({
     selectedItems,
     experienceRating,
-    reviewMode,
     writingTone,
     language,
     userApprovedExamples
   });
 
   return {
-    text: fallbackText,
-    source: "fallback",
-    toneUsed: writingTone,
-    modeUsed: reviewMode
+    ...fallbackOptions,
+    source: "fallback"
   };
 }
 
@@ -291,10 +227,9 @@ function cleanGeneratedText(text) {
 /**
  * Local fallback review generator with English & Hinglish support and simple customer phrasing.
  */
-function generateFallbackReview({
+function generateFallbackReviews({
   selectedItems,
   experienceRating,
-  reviewMode,
   writingTone,
   language,
   userApprovedExamples
@@ -363,7 +298,7 @@ function generateFallbackReview({
     "Burger": ["Burger kafi fresh tha, taste badhiya tha.", "Burger tasty tha."],
     "Momos": ["Momos ekdum garam aur tasty the.", "Wheat momos kafi soft aur delicious the."],
     "Staff": ["Staff polite tha aur service bhi kafi fast thi.", "Service kafi quick thi."],
-    "Ambience": ["Seating comfortable thi aur atmosphere relaxed tha.", "Cozy vibe tha aur seating badhiya thi."],
+    "Ambience": ["Seating comfortable thi aur vibe relaxed tha.", "Cozy vibe tha aur seating badhiya thi."],
     "Cleanliness": ["Cafe ekdum clean aur hygienic setup ke saath tha.", "Clean tables aur safai sahi thi."]
   };
 
@@ -406,43 +341,44 @@ function generateFallbackReview({
     ? ["Aur", "Waise", "Saath mein"] 
     : ["Also", "Plus", "And"];
 
-  let sentences = [];
+  // Generate all three lengths
   
-  if (reviewMode === "Quick") {
-    sentences.push(start);
-    if (chosenItemPhrases.length > 0) {
-      sentences.push(chosenItemPhrases[0]);
-    }
-  } else if (reviewMode === "Normal") {
-    sentences.push(start);
-    if (chosenItemPhrases.length > 0) {
-      sentences.push(chosenItemPhrases[0]);
-      if (chosenItemPhrases[1]) {
-        sentences.push(`${selectRandom(connectors)} ${chosenItemPhrases[1].toLowerCase()}`);
-      }
-    } else {
-      sentences.push(generalOpinion);
+  // 1. Quick
+  let quickSentences = [start];
+  if (chosenItemPhrases.length > 0) {
+    quickSentences.push(chosenItemPhrases[0]);
+  }
+  let quick = quickSentences.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+  if (!quick.endsWith(".") && !quick.endsWith("!")) quick += ".";
+
+  // 2. Normal
+  let normalSentences = [start];
+  if (chosenItemPhrases.length > 0) {
+    normalSentences.push(chosenItemPhrases[0]);
+    if (chosenItemPhrases[1]) {
+      normalSentences.push(`${selectRandom(connectors)} ${chosenItemPhrases[1].toLowerCase()}`);
     }
   } else {
-    sentences.push(start);
-    if (chosenItemPhrases.length > 0) {
-      sentences.push(chosenItemPhrases[0]);
-      if (chosenItemPhrases[1]) {
-        sentences.push(chosenItemPhrases[1]);
-      }
+    normalSentences.push(generalOpinion);
+  }
+  let normal = normalSentences.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+  if (!normal.endsWith(".") && !normal.endsWith("!")) normal += ".";
+
+  // 3. Detailed
+  let detailedSentences = [start];
+  if (chosenItemPhrases.length > 0) {
+    detailedSentences.push(chosenItemPhrases[0]);
+    if (chosenItemPhrases[1]) {
+      detailedSentences.push(chosenItemPhrases[1]);
     }
-    sentences.push(generalOpinion);
   }
+  detailedSentences.push(generalOpinion);
+  let detailed = detailedSentences.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+  if (!detailed.endsWith(".") && !detailed.endsWith("!")) detailed += ".";
 
-  let finalReviewText = sentences
-    .filter(Boolean)
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (!finalReviewText.endsWith(".") && !finalReviewText.endsWith("!")) {
-    finalReviewText += ".";
-  }
-
-  return cleanGeneratedText(finalReviewText);
+  return {
+    quick,
+    normal,
+    detailed
+  };
 }
