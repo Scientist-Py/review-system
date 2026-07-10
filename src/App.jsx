@@ -283,17 +283,13 @@ export default function App() {
   return (
     <div className="relative min-h-screen flex flex-col justify-between overflow-x-hidden pb-12 select-none bg-luxury-black text-luxury-textLight">
       
-      {/* Decorative premium soft glowing orbs */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] bg-gold-400/2 rounded-full blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[300px] h-[300px] bg-blue-400/2 rounded-full blur-[100px] pointer-events-none" />
-
       {/* Top Navbar */}
       <header className="w-full max-w-4xl mx-auto px-4 py-4 flex items-center justify-between border-b border-luxury-border relative z-10">
         <div onClick={handleReset} className="flex items-center gap-2 cursor-pointer">
           <Logo className="w-9 h-9" />
           <div className="text-left">
-            <span className="font-serif text-sm font-bold tracking-wider text-luxury-textLight block">CHAPTER ONE</span>
-            <span className="text-[9px] font-sans font-bold text-gold-600 tracking-widest uppercase block -mt-1">Cafe Assistant</span>
+            <span className="font-sans text-xs font-black tracking-wider text-luxury-textLight block">CHAPTER ONE</span>
+            <span className="text-[9px] font-sans font-bold text-gold-400 tracking-widest uppercase block -mt-1">Cafe Assistant</span>
           </div>
         </div>
 
@@ -301,7 +297,7 @@ export default function App() {
           {showDashboard && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-[#F5F5F7] text-xs text-luxury-textLight hover:bg-[#E5E5EA] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
+              className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-white text-xs text-luxury-textLight hover:bg-[#E5E5EA] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -311,7 +307,7 @@ export default function App() {
           {!showDashboard && (
             <button
               onClick={() => setShowPinModal(true)}
-              className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-[#F5F5F7] text-xs text-luxury-textMuted hover:text-luxury-textLight hover:bg-[#E5E5EA] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
+              className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-luxury-border bg-white text-xs text-luxury-textMuted hover:text-luxury-textLight hover:bg-[#E5E5EA] active:scale-95 transition-all cursor-pointer font-bold shadow-sm"
             >
               <Settings className="w-3.5 h-3.5" />
               <span>Owner Dashboard</span>
@@ -321,23 +317,23 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-8 relative z-10 flex flex-col items-center justify-center">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-10 relative z-10 flex flex-col items-center justify-center">
         
         {showDashboard ? (
           <div className="w-full">
             <Dashboard onClose={() => setShowDashboard(false)} />
           </div>
         ) : (
-          <div className="w-full max-w-md space-y-6 text-center">
+          <div className="w-full max-w-md space-y-8 text-center">
             
             {/* 1. Large Logo and Branding */}
-            <div className="flex flex-col items-center space-y-3 animate-fade-in">
+            <div className="flex flex-col items-center space-y-4 animate-fade-in">
               <Logo className="w-24 h-24 shadow-gold-glow" />
               <div>
-                <h1 className="font-serif text-2.5xl sm:text-3.5xl font-extrabold tracking-wide text-luxury-textLight">
+                <h1 className="font-sans text-3xl font-black tracking-tight text-luxury-textLight">
                   Chapter One Cafe
                 </h1>
-                <p className="text-xs font-sans font-bold text-gold-600 tracking-widest uppercase mt-0.5">
+                <p className="text-[10px] font-sans font-extrabold text-gold-400 tracking-widest uppercase mt-1">
                   AI Review Assistant
                 </p>
               </div>
@@ -359,7 +355,7 @@ export default function App() {
                   </div>
                 ) : (
                   <>
-                    <Sparkles className="w-4.5 h-4.5 text-amber-400 fill-amber-400" />
+                    <Sparkles className="w-4.5 h-4.5 text-white fill-white" />
                     <span className="text-sm">Post Instant Review</span>
                   </>
                 )}
@@ -380,7 +376,7 @@ export default function App() {
             {showCustomizer && (
               <div className="w-full p-6 rounded-3xl border border-luxury-border bg-luxury-card shadow-gold-glow-lg space-y-5 animate-slide-up text-left">
                 <div>
-                  <h3 className="font-serif text-lg font-bold tracking-wide">
+                  <h3 className="font-sans text-lg font-bold tracking-tight">
                     Configure Custom Review
                   </h3>
                   <p className="text-[10px] text-luxury-textMuted font-sans font-bold">Select details below to generate specific drafts.</p>
@@ -388,7 +384,7 @@ export default function App() {
 
                 {/* Checklist: What did you enjoy? */}
                 <div className="space-y-1.5">
-                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">What did you enjoy?</label>
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-luxury-textMuted">What did you enjoy?</label>
                   <div className="flex flex-wrap gap-1.5 select-none">
                     {CHECKLIST_ITEMS.map((item) => {
                       const isSelected = selectedItems.includes(item);
@@ -411,8 +407,8 @@ export default function App() {
                 </div>
 
                 {/* Rating Selector */}
-                <div className="space-y-1 text-center py-2 bg-[#F5F5F7]/60 rounded-2xl border border-luxury-border shadow-inner">
-                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600">How was your experience?</label>
+                <div className="space-y-1 text-center py-2 bg-[#F5F5F7] rounded-2xl border border-luxury-border shadow-inner">
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-luxury-textMuted">How was your experience?</label>
                   
                   <div className="flex items-center justify-center gap-1.5 py-1 select-none">
                     {[1, 2, 3, 4, 5].map((star) => {
@@ -429,23 +425,23 @@ export default function App() {
                           <Star
                             className={`w-7.5 h-7.5 transition-all ${
                               active
-                                ? 'fill-gold-400 stroke-gold-500 drop-shadow-[0_0_3px_rgba(255,215,0,0.3)]'
-                                : 'stroke-gray-300 fill-transparent hover:stroke-gold-400'
+                                ? 'fill-gold-500 stroke-gold-500 drop-shadow-[0_0_3px_rgba(255,159,10,0.25)]'
+                                : 'stroke-gray-300 fill-transparent hover:stroke-gold-500'
                             }`}
                           />
                         </button>
                       );
                     })}
                   </div>
-                  <span className="text-[10px] font-sans font-bold text-gold-600 uppercase opacity-95">
+                  <span className="text-[10px] font-sans font-bold text-gold-500 uppercase opacity-95">
                     {getRatingLabel(hoverRating || experienceRating) || "Rate Us"}
                   </span>
                 </div>
 
                 {/* Language Selector */}
                 <div className="space-y-1.5">
-                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
-                    <Languages className="w-3.5 h-3.5 text-gold-600" />
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-luxury-textMuted flex items-center gap-1">
+                    <Languages className="w-3.5 h-3.5 text-luxury-textMuted" />
                     Review Language
                   </label>
                   <div className="grid grid-cols-2 gap-1 bg-[#F5F5F7] p-1 rounded-xl border border-luxury-border">
@@ -471,8 +467,8 @@ export default function App() {
 
                 {/* Tone Selector */}
                 <div className="space-y-1.5">
-                  <label className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 flex items-center gap-1">
-                    <Type className="w-3.5 h-3.5 text-gold-600" />
+                  <label className="block text-[9px] uppercase font-bold tracking-wider text-luxury-textMuted flex items-center gap-1">
+                    <Type className="w-3.5 h-3.5 text-luxury-textMuted" />
                     Writing Tone
                   </label>
                   <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar select-none">
@@ -518,13 +514,13 @@ export default function App() {
                 {/* Customizer Generated Options Display */}
                 {!isGenerating && drafts && (
                   <div className="space-y-3 pt-3 border-t border-luxury-border">
-                    <span className="block text-[9px] uppercase font-bold tracking-wider text-gold-600 text-center">Select your favorite option</span>
+                    <span className="block text-[9px] uppercase font-bold tracking-wider text-luxury-textMuted text-center">Select your favorite option</span>
                     
                     <div className="grid grid-cols-1 gap-3">
                       {/* 1. Quick Option */}
                       <div className="p-4 rounded-2xl border border-luxury-border bg-white shadow-sm flex flex-col justify-between">
                         <div className="flex items-center justify-between mb-1.5">
-                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Quick Option</span>
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-[#0071E3] bg-[#0071E3]/5 border border-[#0071E3]/20 rounded-md">Quick Option</span>
                           <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.quick.split(/\s+/).length} words</span>
                         </div>
                         <textarea
@@ -534,7 +530,7 @@ export default function App() {
                         />
                         <button
                           onClick={() => handlePostReviewClick(drafts.quick)}
-                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-[#0071E3] hover:bg-[#0058B0] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
                         >
                           <Copy className="w-3.5 h-3.5" />
                           <span>{copiedText === drafts.quick ? "Copied!" : "Copy & Post"}</span>
@@ -542,10 +538,10 @@ export default function App() {
                       </div>
 
                       {/* 2. Casual Option */}
-                      <div className="p-4 rounded-2xl border border-gold-400/30 bg-white shadow-md flex flex-col justify-between relative">
-                        <div className="absolute top-0 right-4 translate-y-[-50%] bg-gold-600 text-white text-[7px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Popular</div>
+                      <div className="p-4 rounded-2xl border border-gold-400/30 bg-white shadow-sm flex flex-col justify-between relative">
+                        <div className="absolute top-0 right-4 translate-y-[-50%] bg-[#0071E3] text-white text-[7px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Popular</div>
                         <div className="flex items-center justify-between mb-1.5">
-                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Casual Option</span>
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-[#0071E3] bg-[#0071E3]/5 border border-[#0071E3]/20 rounded-md">Casual Option</span>
                           <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.normal.split(/\s+/).length} words</span>
                         </div>
                         <textarea
@@ -555,7 +551,7 @@ export default function App() {
                         />
                         <button
                           onClick={() => handlePostReviewClick(drafts.normal)}
-                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-[#0071E3] hover:bg-[#0058B0] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
                         >
                           <Copy className="w-3.5 h-3.5" />
                           <span>{copiedText === drafts.normal ? "Copied!" : "Copy & Post"}</span>
@@ -565,7 +561,7 @@ export default function App() {
                       {/* 3. Detailed Option */}
                       <div className="p-4 rounded-2xl border border-luxury-border bg-white shadow-sm flex flex-col justify-between">
                         <div className="flex items-center justify-between mb-1.5">
-                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-gold-700 bg-gold-50 border border-gold-400/20 rounded-md">Foodie Option</span>
+                          <span className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold text-[#0071E3] bg-[#0071E3]/5 border border-[#0071E3]/20 rounded-md">Foodie Option</span>
                           <span className="text-[8px] font-sans font-bold text-luxury-textMuted">{drafts.detailed.split(/\s+/).length} words</span>
                         </div>
                         <textarea
@@ -575,7 +571,7 @@ export default function App() {
                         />
                         <button
                           onClick={() => handlePostReviewClick(drafts.detailed)}
-                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-luxury-dark hover:bg-luxury-darkHover hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
+                          className="mt-2 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-[10px] font-sans font-bold text-white bg-[#0071E3] hover:bg-[#0058B0] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer w-full"
                         >
                           <Copy className="w-3.5 h-3.5" />
                           <span>{copiedText === drafts.detailed ? "Copied!" : "Copy & Post"}</span>

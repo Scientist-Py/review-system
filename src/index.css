@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold-50: #F2F7FD;
-  --color-gold-100: #E1EFFF;
-  --color-gold-200: #C2DFFF;
-  --color-gold-300: #85C0FF;
+  --color-gold-50: #FFF9E6;
+  --color-gold-100: #FFE699;
+  --color-gold-200: #FFD14D;
+  --color-gold-300: #FFB800;
   --color-gold-400: #0071E3;       /* Apple Link Blue */
   --color-gold-450: #0071E3;
-  --color-gold-500: #0058B0;       /* Dark Apple Blue */
+  --color-gold-500: #FF9F0A;       /* Apple iOS Gold/Orange for rating stars */
   --color-gold-600: #0071E3;
   --color-gold-700: #0058B0;
   --color-gold-800: #004494;
@@ -16,22 +16,22 @@
   --color-luxury-black: #F5F5F7;      /* Apple Neutral Light Gray Background */
   --color-luxury-dark: #1D1D1F;       /* Apple Charcoal Solid Active Color */
   --color-luxury-darkHover: #000000;
-  --color-luxury-card: rgba(255, 255, 255, 0.8); /* Light Frosted Glassmorphism card */
-  --color-luxury-glass: rgba(255, 255, 255, 0.94);
-  --color-luxury-border: rgba(0, 0, 0, 0.08); /* Thin gray border */
-  --color-luxury-borderHover: rgba(0, 0, 0, 0.16); 
+  --color-luxury-card: #FFFFFF;       /* Pure White Card */
+  --color-luxury-glass: #FFFFFF;      /* Pure White Glass */
+  --color-luxury-border: #D2D2D7;     /* Apple Gray Border */
+  --color-luxury-borderHover: #86868B; 
   --color-luxury-textMuted: #86868B;  /* Apple Neutrals Gray */
   --color-luxury-textLight: #1D1D1F;  /* Apple Charcoal Header Text */
 
-  --font-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
-  --shadow-gold-glow: 0 8px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
-  --shadow-gold-glow-lg: 0 10px 40px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-gold-glow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-gold-glow-lg: 0 12px 30px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
 
-  --animate-fade-in: fadeIn 0.5s ease-out forwards;
-  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-pulse-subtle: pulseSubtle 2.5s infinite ease-in-out;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
+  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-subtle: pulseSubtle 2s infinite ease-in-out;
   --animate-float: float 6s ease-in-out infinite;
   --animate-shake: shake 0.4s ease-in-out;
 
@@ -40,21 +40,21 @@
     100% { opacity: 1; }
   }
   @keyframes slideUp {
-    0% { transform: translateY(24px); opacity: 0; }
+    0% { transform: translateY(16px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
   @keyframes pulseSubtle {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.75; }
+    50% { opacity: 0.8; }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-4px); }
   }
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
   }
 }
 
@@ -68,31 +68,28 @@
 
 body {
   background-color: #F5F5F7;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(245, 166, 35, 0.02) 0px, transparent 50%);
   color: #1D1D1F;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 /* Custom premium scrollbar for our dishes list and page */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.01);
+  background: rgba(0, 0, 0, 0.02);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
 }
