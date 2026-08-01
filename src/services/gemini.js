@@ -63,40 +63,15 @@ ABSOLUTE RULES:
 * Never force positivity.
 * Match the customer's actual ratings and experience.
 
-CRITICAL REALISM & NATURAL LANGUAGE RULES:
+CRITICAL ANTI-REPETITION & VOCABULARY RULES:
+* DO NOT keep using the same few keywords and phrases (such as "nice spot", "hangout", "bhot accha", "bahut achha", "kafi badhiya", "good place"). Vary the wording continuously.
+* For English: Use varied words like "tasty food", "really liked it", "clean tables", "quick service", "polite staff", "fresh burger", "cozy layout", "hot serving".
+* For Hinglish: Use diverse expressions like "swad mast tha", "maza aa gaya", "expected se better", "sahi jagah", "fast service mili", "safai acchi thi", "friend circle ke sath gye", "mahaul chilled hai", "sahi seating arrangement".
 * DO NOT use fancy vocabulary or elaborate adjectives (like "delightful", "impeccable", "epitome", "ambassador", "savored", "mouthwatering", "nestled", "establishment", "culinary", "experience was enhanced", "highly recommend", "must-visit").
 * Do NOT start reviews with: "Just dropped by", "Stopped by", "Quick stopover", "On a recent visit", "While visiting", "Decided to try", "Food enthusiast", "Visited this cafe", "Had the pleasure of visiting".
 * Do NOT sound like a food blogger, travel reviewer, or marketing content.
 * Avoid these forbidden words/phrases: "moreover", "furthermore", "additionally", "aesthetic details", "luxury theme", "exceptional", "outstanding", "remarkable", "highly recommended".
 * Most reviews must be written in simple everyday language.
-* Study these examples of natural, simple customer review styles and write in a similar tone:
-  - Good food and nice ambience.
-  - Pizza was really good.
-  - One of the best cafes in Baghpat.
-  - Cold coffee was refreshing.
-  - Staff was polite and service was quick.
-  - Nice place to spend time with friends.
-  - The 17 inch pizza is worth trying.
-  - Portion size was good.
-  - Food quality was nice.
-  - Clean and well maintained cafe.
-  - Good family atmosphere.
-  - Seating arrangement is comfortable.
-  - Pizza was loaded with toppings.
-  - Burger was fresh and filling.
-  - Wheat momos tasted good.
-  - Service was fast.
-  - Nice location near bypass road.
-  - Good cafe for evening snacks.
-  - Prices are reasonable.
-  - Good place for small parties.
-  - Friends enjoyed the food.
-  - Will visit again with family.
-  - Worth visiting once.
-  - One of the better food places in Baghpat.
-  - Pizza size was impressive.
-  - Food was served hot and fresh.
-  - Nice experience overall.
 
 WRITING PERSONALITIES & TONE:
 - Write in this tone: ${writingTone}
@@ -145,12 +120,11 @@ LANGUAGE RULES:
 - If language is English: Use natural Indian English.
 - If language is Hinglish: Use conversational Hinglish written in English letters.
 Examples of natural Hinglish:
-* Maza aa gaya.
-* Taste kaafi accha tha.
-* Pizza expected se bhi better nikla.
-* Friends ke saath aane ke liye acchi jagah hai.
-* Cold coffee kaafi refreshing thi.
-* Service bhi kaafi smooth thi.
+* Sahi laga taste.
+* Pizza expected se badhiya tha.
+* Service kafi fast mili hume.
+* Friends ke sath shaam ko aaye the.
+* Cold coffee kafi chilled aur refresh kar dene wali thi.
 Do not overdo Hinglish slang.
 
 LOCAL KEYWORDS TO RANDOMLY USE (Do not force them, keep it natural):
@@ -244,68 +218,146 @@ function generateFallbackReviews({
   
   const name = Math.random() < 0.3 ? nameOptions[0] : selectRandom(nameOptions.slice(1));
 
-  // Simple customer starters
+  // Expanded and highly varied starter list to prevent repetition
   const englishStarters = [
-    `Good place.`,
-    `Nice experience at ${name}.`,
-    `Really nice spot to hangout.`,
     `Tried this cafe today.`,
-    `Great food and vibes.`
+    `Good food and quick service.`,
+    `Perfect spot for a quick bite.`,
+    `Visited this place with family.`,
+    `Really liked the vibes here.`,
+    `Clean cafe and great service.`,
+    `Quality of food was really good.`,
+    `Nice ambiance and seating.`,
+    `Decent prices and hot food.`,
+    `Very cozy and neat environment.`,
+    `Great experience overall at ${name}.`,
+    `We had a nice time at this spot.`,
+    `Food taste was quite good here.`
   ];
 
   const englishItemPhrases = {
     "Pizza": [
-      "Pizza was really cheesy and tasty.",
-      "The pizza was hot and cheesy, loved it.",
-      "Good pizza size and toppings."
+      "Pizza was hot and cheesy.",
+      "The pizza was loaded with toppings.",
+      "Good pizza size and taste.",
+      "Cheesy pizza was really fresh.",
+      "Loved the pizza toppings."
     ],
     "Cold Coffee": [
-      "Cold coffee was refreshing and had good sweetness.",
-      "Nice cold coffee, perfect taste and chilled.",
-      "Cold coffee was very refreshing."
+      "Cold coffee was sweet and chilled.",
+      "Refreshing cold coffee, perfect taste.",
+      "Chilled cold coffee tasted great.",
+      "Loved the sweetness of the cold coffee.",
+      "Cold coffee was super refreshing."
     ],
-    "Burger": ["Burger was fresh and tasted nice.", "Loved the fresh burger bun and filling portion."],
-    "Momos": ["Momos were hot, fresh, and tasty.", "Wheat momos tasted really good and fresh."],
-    "Staff": ["Staff was polite and service was quick.", "Service was quick and staff was friendly."],
-    "Ambience": ["Seating arrangement is comfortable and lighting is nice.", "Nice seating and comfortable vibe."],
-    "Cleanliness": ["Cafe is clean.", "Tables were clean and the environment was tidy."]
+    "Burger": [
+      "Burger bun was fresh and tasty.",
+      "Loved the filling burger portion.",
+      "Burger was loaded and fresh.",
+      "Taste of the burger was very nice."
+    ],
+    "Momos": [
+      "Momos were served hot and fresh.",
+      "Wheat momos tasted really good.",
+      "Momos stuffing was delicious.",
+      "Really liked the fresh momos."
+    ],
+    "Staff": [
+      "Service was fast and staff was polite.",
+      "Helpful staff and quick serving time.",
+      "Quick service, friendly interactions.",
+      "Attentive staff made it smooth."
+    ],
+    "Ambience": [
+      "Seating is comfortable and lighting is nice.",
+      "Relaxing atmosphere and comfortable vibe.",
+      "Good music and nice seating space.",
+      "Cozy setup, suitable for groups."
+    ],
+    "Cleanliness": [
+      "The place is clean and neat.",
+      "Hygienic tables and tidy setup.",
+      "Cleanliness is well maintained.",
+      "Hygienic environment overall."
+    ]
   };
 
   const englishGeneralPositive = [
     "Overall experience was good.",
-    "Will visit again.",
-    "Nice experience overall."
+    "Will visit again soon.",
+    "Decent food quality.",
+    "Worth trying once.",
+    "Highly satisfied with the visit."
   ];
 
   const hinglishStarters = [
-    `${name} kafi badhiya spot hai.`,
-    `${name} mein badhiya time spend kiya.`,
-    `Baghpat mein ye cafe kafi sahi hai.`,
-    `Friends ke saath hang out karne ke liye achha spot hai.`
+    `Sahi jagah hai.`,
+    `Food taste kafi sahi tha.`,
+    `Garam khana aur fast service mili.`,
+    `Vibe kafi chilled out hai.`,
+    `Family ke sath gye the yahan.`,
+    `Safai ekdum mast thi.`,
+    `Kuchh different try kiya aaj.`,
+    `Garam garam momos aur pizza kha kar maza aa gaya.`,
+    `Baghpat mein kafi sahi cafe hai.`,
+    `Sahi seating aur calm mahaul tha.`,
+    `Doston ke sath aane ki badhiya jagah hai.`,
+    `Khana garam aur fresh serve kiya.`
   ];
 
   const hinglishItemPhrases = {
     "Pizza": [
-      "Pizza ka taste expected se better tha aur size bhi bada tha.",
-      "Pizza super cheesy tha aur taste next level tha.",
-      "Garam pizza aur badhiya toppings, maza aa gaya."
+      "Pizza expected se better tha aur size bhi sahi tha.",
+      "Pizza cheesy tha aur toppings badhiya thi.",
+      "Garam pizza tha, maza aa gaya.",
+      "Pizza ka base aur taste ekdum perfect tha.",
+      "Cheesy pizza kafi tasty laga."
     ],
     "Cold Coffee": [
-      "Cold coffee kafi refreshing thi aur sweetness balanced thi.",
-      "Cold coffee thandi aur sweet thi, perfect taste.",
-      "Maza aa gaya cold coffee pee kar."
+      "Cold coffee thandi aur refreshing thi.",
+      "Chilled cold coffee ka taste ekdum mast tha.",
+      "Coffee mein sweetness bilkul sahi thi.",
+      "Maza aa gaya cold coffee pee kar.",
+      "Refreshing thandi coffee thi."
     ],
-    "Burger": ["Burger kafi fresh tha, taste badhiya tha.", "Burger tasty tha."],
-    "Momos": ["Momos ekdum garam aur tasty the.", "Wheat momos kafi soft aur delicious the."],
-    "Staff": ["Staff polite tha aur service bhi kafi fast thi.", "Service kafi quick thi."],
-    "Ambience": ["Seating comfortable thi aur vibe relaxed tha.", "Cozy vibe tha aur seating badhiya thi."],
-    "Cleanliness": ["Cafe ekdum clean aur hygienic setup ke saath tha.", "Clean tables aur safai sahi thi."]
+    "Burger": [
+      "Burger kafi heavy aur fresh tha.",
+      "Burger taste mein kafi accha tha.",
+      "Fresh buns aur tasty filling thi burger mein.",
+      "Burger badhiya aur filling laga."
+    ],
+    "Momos": [
+      "Momos ekdum garam aur delicious the.",
+      "Wheat momos kafi soft aur healthy option hai.",
+      "Momos stuffing sahi thi aur chatni mast thi.",
+      "Garam garam momos kafi tasty the."
+    ],
+    "Staff": [
+      "Staff polite tha aur service quick thi.",
+      "Service kafi fast aur smooth mili hume.",
+      "Attentive staff aur badiya behaviour tha.",
+      "Bina delay ke jaldi order serve kiya."
+    ],
+    "Ambience": [
+      "Seating comfortable thi aur vibe relaxed tha.",
+      "Cozy atmosphere aur comfortable seating space hai.",
+      "Mahaul kafi relaxed aur positive laga.",
+      "Interior aur seating arrangement accha hai."
+    ],
+    "Cleanliness": [
+      "Cafe ekdum clean aur tables clean the.",
+      "Safai aur hygiene kafi sahi thi yahan.",
+      "Space neat and clean maintained tha.",
+      "Safai par kafi dhyan diya gaya hai."
+    ]
   };
 
   const hinglishGeneralPositive = [
     "Overall maza aa gaya.",
     "Dobara zaroor visit karenge.",
-    "Nice experience tha yahan."
+    "Nice experience tha yahan.",
+    "Worth visiting place hai.",
+    "Khana aur service dono sahi the."
   ];
 
   const starterList = isHinglish ? hinglishStarters : englishStarters;
