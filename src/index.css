@@ -13,12 +13,12 @@
   --color-gold-800: #004494;
   --color-gold-900: #002D6B;
 
-  --color-luxury-black: #F5F5F7;      /* Apple Neutral Light Gray Background */
+  --color-luxury-black: #FFFFFF;      /* Pure White Background */
   --color-luxury-dark: #1D1D1F;       /* Apple Charcoal Solid Active Color */
   --color-luxury-darkHover: #000000;
   --color-luxury-card: #FFFFFF;       /* Pure White Card */
   --color-luxury-glass: #FFFFFF;      /* Pure White Glass */
-  --color-luxury-border: #D2D2D7;     /* Apple Gray Border */
+  --color-luxury-border: #E5E5EA;     /* Thin gray border */
   --color-luxury-borderHover: #86868B; 
   --color-luxury-textMuted: #86868B;  /* Apple Neutrals Gray */
   --color-luxury-textLight: #1D1D1F;  /* Apple Charcoal Header Text */
@@ -26,8 +26,8 @@
   --font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
-  --shadow-gold-glow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-gold-glow-lg: 0 12px 30px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-gold-glow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-gold-glow-lg: 0 4px 16px rgba(0, 0, 0, 0.04);
 
   --animate-fade-in: fadeIn 0.4s ease-out forwards;
   --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -40,7 +40,7 @@
     100% { opacity: 1; }
   }
   @keyframes slideUp {
-    0% { transform: translateY(16px); opacity: 0; }
+    0% { transform: translateY(12px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
   @keyframes pulseSubtle {
@@ -67,7 +67,7 @@
 }
 
 body {
-  background-color: #F5F5F7;
+  background-color: #FFFFFF;
   color: #1D1D1F;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
@@ -81,15 +81,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.02);
+  background: rgba(0, 0, 0, 0.01);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.2);
 }
